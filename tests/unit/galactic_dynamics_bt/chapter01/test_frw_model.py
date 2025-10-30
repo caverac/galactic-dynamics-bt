@@ -118,7 +118,7 @@ class TestFRWModel:
 
             # Verify savefig was called with correct parameters
             mock_fig.savefig.assert_called_once_with(
-                "docs/assets/frw_model.png",
+                "docs/assets/generated/frw_model.png",
                 dpi=150,
                 bbox_inches="tight",
                 facecolor="white",

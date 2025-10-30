@@ -85,6 +85,6 @@ $$
 2\Omega_{\Lambda 0} - \Omega_{m0} = 0
 $$
 
-![FRW Model Phase Diagram](assets/frw_model.png)
+![FRW Model Phase Diagram](assets/generated/frw_model.png)
 
 *Figure 1.1: Phase diagram of FRW cosmological models in the $\Omega_{m0}$-$\Omega_{\Lambda 0}$ plane. The solid line indicates the boundary between bound and unbound models, while the dashed line indicates the boundary between decelerating and accelerating models.*
