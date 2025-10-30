@@ -1,0 +1,17 @@
+# cache files
+__pycache__
+.mypy_cache
+.pytest_cache
+.ipynb_checkpoints
+.coverage
+coverage.xml
+
+# virtual environment
+.venv
+
+# local development files
+notebooks
+.envrc
+
+# docs
+site

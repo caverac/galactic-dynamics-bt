@@ -1,0 +1,69 @@
+site_name: "Galactic Dynamics (BT 2008) Solutions"
+site_description: Solutions to the problem sets from Binney & Tremaine's Galactic Dynamics (2nd Edition).
+site_url: https://caverac.github.io/galactic-dynamics-bt/
+repo_url: https://github.com/caverac/galactic-dynamics-bt
+repo_name: caverac/galactic-dynamics-bt
+
+extra:
+  version: "0.1.0"
+  social:
+    - icon: fontawesome/brands/github
+      link: https://github.com/caverac/galactic-dynamics-bt
+
+theme:
+  name: material
+  custom_dir: docs/overrides
+  features:
+    - navigation.sections
+    - content.code.copy
+    - content.action.view
+    - content.action.edit
+    - announce.dismiss
+  palette:
+    - media: "(prefers-color-scheme: light)"
+      scheme: default
+      toggle:
+        icon: material/weather-night
+        name: "Switch to dark mode"
+    - media: "(prefers-color-scheme: dark)"
+      scheme: slate
+      toggle:
+        icon: material/white-balance-sunny
+        name: "Switch to light mode"
+edit_uri: edit/main/docs/
+
+plugins:
+  - search
+  - autorefs
+  - macros:
+      module_name: main
+  - mkdocstrings:
+      default_handler: python
+      handlers:
+        python:
+          options:
+            docstring_style: numpy
+            show_signature: true
+  - bibtex:
+      bib_file: docs/refs.bib
+      csl_file: docs/apa.csl
+      enable_inline_citations: false
+
+markdown_extensions:
+  - footnotes
+  - markdown.extensions.admonition
+  - pymdownx.details
+  - pymdownx.superfences
+  - pymdownx.highlight:
+      anchor_linenums: true
+      pygments_lang_class: true
+  - pymdownx.arithmatex:
+      generic: true
+
+nav:
+  - Home: index.md
+  - Chapter 1: chapter01.md
+
+extra_javascript:
+  - javascripts/mathjax.js
+  - https://unpkg.com/mathjax@3/es5/tex-mml-chtml.js
