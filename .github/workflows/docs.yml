@@ -3,6 +3,10 @@ name: docs
 on:
   push:
     branches: [main]
+  workflow_run:
+    workflows: ["Release"]
+    branches: [main]
+    types: [completed]
 
 permissions:
   contents: read
@@ -17,10 +21,16 @@ jobs:
   build:
     name: Build MkDocs site
     runs-on: ubuntu-latest
+    # Only run if the release workflow completed successfully, or if this is a direct push without a release workflow run
+    if: ${{ github.event_name == 'push' || (github.event_name == 'workflow_run' && github.event.workflow_run.conclusion == 'success') }}
 
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+        with:
+          # Fetch the latest changes, including any updates from the release workflow
+          ref: main
+          fetch-depth: 0
 
       - name: Set up Python
         uses: actions/setup-python@v5
