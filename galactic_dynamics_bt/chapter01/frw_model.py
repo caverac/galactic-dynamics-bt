@@ -13,7 +13,6 @@ logger = logging.getLogger(__name__)
 
 def plot_frw_models() -> None:
     """Plot the FRW model parameter space."""
-
     fig: Figure
     axs: Axes
     fig, axs = plt.subplots(  # type: ignore[misc]
