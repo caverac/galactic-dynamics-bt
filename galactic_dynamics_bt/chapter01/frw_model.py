@@ -60,7 +60,7 @@ def plot_frw_models() -> None:
     axs.plot(x, y, "--k", lw=1.5)
 
     fig.savefig(
-        "docs/assets/frw_model.png",
+        "docs/assets/generated/frw_model.png",
         dpi=150,
         bbox_inches="tight",
         facecolor="white",
