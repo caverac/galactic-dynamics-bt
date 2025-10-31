@@ -1,11 +1,11 @@
 """Unit tests for FRW model plotting functionality."""
 
-from unittest.mock import patch, MagicMock
+from unittest.mock import MagicMock, patch
 
-import pytest
-import numpy as np
-from matplotlib.figure import Figure
 from matplotlib.axes import Axes
+from matplotlib.figure import Figure
+import numpy as np
+import pytest
 
 from galactic_dynamics_bt.chapter01.frw_model import plot_frw_models
 
