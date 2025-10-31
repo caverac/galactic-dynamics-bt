@@ -2,11 +2,11 @@
 
 import logging
 
-import numpy as np
 from matplotlib import pyplot as plt
-from matplotlib.figure import Figure
 from matplotlib.axes import Axes
-from matplotlib.ticker import MultipleLocator, AutoMinorLocator
+from matplotlib.figure import Figure
+from matplotlib.ticker import AutoMinorLocator, MultipleLocator
+import numpy as np
 
 logger = logging.getLogger(__name__)
 
@@ -15,7 +15,7 @@ def plot_frw_models() -> None:
     """Plot the FRW model parameter space."""
     fig: Figure
     axs: Axes
-    fig, axs = plt.subplots(  # type: ignore[misc]
+    fig, axs = plt.subplots(
         1,
         1,
         figsize=(6.5, 5),
@@ -49,7 +49,7 @@ def plot_frw_models() -> None:
 
     # open-closed model
     x = np.linspace(0, 3, 100)
-    y = 1 - x
+    y = np.ones_like(x) - x
     axs.plot(x, y, "-k", lw=1.5)
     axs.text(0.5, 0.4, "Open", ha="center", va="center", rotation=-40)
     axs.text(0.6, 0.5, "Closed", ha="center", va="center", rotation=-40)

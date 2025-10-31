@@ -26,6 +26,7 @@ keywords = [
 dependencies = [
     "dacite>=1.9.2",
     "matplotlib>=3.0.0",
+    "scipy>=1.16.3",
 ]
 
 [project.urls]
@@ -44,10 +45,14 @@ dev = [
     "pytest-cov>=5.0",
     "mypy>=1.11",
     "flake8>=7.3.0",
+    "flake8-docstrings>=1.7.0",
+    "flake8-import-order>=0.18.2",
     "pylint>=4.0.0",
     "black>=25.9.0",
     "pydocstyle>=6.3.0",
     "commitizen>=3.0.0",
+    "scipy-stubs>=1.11.0",
+    "pre-commit>=4.3.0",
 ]
 
 docs = [
@@ -103,6 +108,11 @@ python_version = "3.12"
 warn_return_any = true
 warn_unused_configs = true
 disallow_untyped_defs = true
+strict_optional = true
+warn_redundant_casts = true
+warn_unused_ignores = true
+check_untyped_defs = true
+no_implicit_reexport = true
 
 [tool.coverage.run]
 source = ["galactic_dynamics_bt"]

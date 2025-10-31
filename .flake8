@@ -1,2 +1,8 @@
 [flake8]
 max-line-length = 120
+extend-ignore = E203, W503
+import-order-style = google
+application-import-names = galactic_dynamics_bt
+per-file-ignores =
+    __init__.py:F401
+    tests/*:D

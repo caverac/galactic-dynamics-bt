@@ -1,6 +1,7 @@
 """Python source code for some solutions."""
 
 import logging
+
 import matplotlib
 
 matplotlib.rcParams["font.family"] = "serif"
