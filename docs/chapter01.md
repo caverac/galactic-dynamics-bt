@@ -64,7 +64,7 @@ $$
 <!-- ======================= -->
 ## Problem 1.2
 
-### a. luminosity density to surface brightness
+### a. Luminosity density to surface brightness
 Using the same construct of Fig. 2.3 define $R, z$ such that $r^2 = R^2 + z^2$. The surface brightness at projected radius $R$ is given by
 
 $$
@@ -155,6 +155,143 @@ plot_sersic_profile()
 ![FRW Model Phase Diagram](assets/generated/sersic_profile.png)
 
 *Figure P1.2: Sersic luminosity density profile derived from the surface brightness profile using the inversion formula. For comparison different values of the parameter $m$ are shown.*
+
+<!-- ======================= -->
+<!-- PROBLEM 1.3            -->
+<!-- ======================= -->
+## Problem 1.3
+
+### a. Strip brightness
+
+$$
+\begin{align}
+S(x) &= \int_{-\infty}^{+\infty} dy I(\sqrt{x^2 + y^2}) \\
+&= 2\int_{0}^{+\infty} dy I(\sqrt{x^2 + y^2}) \quad\text{with}\quad R^2 = x^2 + y^2 \\
+&= 2\int_x^\infty dR \frac{R I(R)}{\sqrt{R^2 - x^2}}
+\end{align}
+$$
+
+### b. From strip brightness to brightness profiles
+
+Start with
+
+$$
+\begin{align}
+S(x) &= 2\int_x^\infty dR \frac{R I(R)}{\sqrt{R^2 - x^2}} \\
+&= 4\int_x^\infty dR\int_R^\infty dr \frac{r j(r)}{\sqrt{r^2 - R^2}\sqrt{R^2 - x^2}} \\
+&= 4\int_x^\infty dr r j(r) \underbrace{\int_x^r dR \frac{R}{\sqrt{r^2 - R^2}\sqrt{R^2 - x^2}}}_{\pi/2} \\
+&= 2\pi\int_x^\infty dr r j(r).
+\end{align}
+$$
+
+Taking the derivative with respect to $x$ we have
+
+$$
+j(x) = -\frac{1}{2\pi x}\frac{dS}{dx}.
+$$
+
+The cumulative luminosity inside radius $r$ is given by
+
+
+$$
+L(r) = 4\pi \int_0^r dx x^2 j(x) = 4\pi \int_0^r dx x^2\left[-\frac{1}{2\pi x}\frac{dS}{dx}\right] = -2\int_0^r dx x \frac{dS}{dx}.
+$$
+
+
+<!-- ======================= -->
+<!-- PROBLEM 1.4            -->
+<!-- ======================= -->
+## Problem 1.4
+
+### a. Central surface brightness of an axisymmetric galaxy
+We are assuming the axisymmetric density density distribution $j$ can be written as
+
+$$
+j = j(m) \quad\text{ with }\quad m^2 = R^2 + \frac{z^2}{q^2}.
+$$
+
+The projected surface brightness is simple the line-of-sight integral of the luminosity density
+
+$$
+I(R) = \int_{-\infty}^{+\infty} ds j(m).
+$$
+
+where $s$ measures distance along the line of sight. Let's consider two cases
+
+**Face-on view** For a face-on line of sight, we have $R = 0$ and $m = z/q$, thus the central intensity is
+
+$$
+I_n = 2\int_0^\infty dz j(m) = 2q\int_0^\infty dm j(m).
+$$
+
+**Inclined view** The coodinate transformation for the central line of sight inclined by an angle $i$ is given by $R = s\sin i$ and $z = s\cos i$, so that the ellipsoidal radius along the line of sight is given by
+
+$$
+m^2 = s^2\sin^2 i + \frac{s^2\cos^2 i}{q^2} = s^2\left(\sin^2 i + \frac{\cos^2 i}{q^2}\right).
+$$
+
+Which means that
+
+$$
+\frac{dm}{ds} = \sqrt{\sin^2 i + \frac{\cos^2 i}{q^2}},
+$$
+
+and
+
+$$
+I_0(i) = 2\int_0^\infty ds j(m) = 2\int_0^\infty dm \frac{j(m)}{dm/ds} = \frac{2}{\sqrt{\sin^2 i + \cos^2 i/q^2}}\int_0^\infty dm j(m).
+$$
+
+The ratio is then
+
+$$
+\frac{I_0(i)}{I_n} = \frac{1/q}{\sqrt{\sin^2 i + \cos^2 i/q^2}}
+$$
+
+We now consider two cases depending on $q$
+
+**Oblate case** ($q<1$) In this case $Q^2 = \cos^2 i + q^2\sin^2 i < 1$ and we can write
+
+$$
+I_0 = \frac{I_n}{Q}
+$$
+
+$Q$ decreases from $1$ (face-on) to $q$ (edge-on).
+
+**Prolate case** ($q>1$) In this case $Q^2 = \sin^2 i + \cos^2 i/q^2 < 1$ and we can write
+
+$$
+I_0 = \frac{I_n}{\sqrt{q^2 + 1 - q^2Q^2}}
+$$
+
+$Q$ decreases from $1$ (viewed along the long axis) to $1/q$ (viewed perpendicular to it).
+
+### b. Relation between apparent and intrinsic axis ratios
+
+The relation is given by
+
+$$
+\begin{align}
+Q^2 &= \cos^2 i + q^2\sin^2 i, \quad\text{oblate case}\\
+Q^2 &= \sin^2 i + \frac{\cos^2 i}{q^2}, \quad\text{prolate case}
+\end{align}
+$$
+
+### c. Probability distribution of apparent axis ratios
+
+For random orientation, the inclination $u$ has a PDF $p(i) = \sin i$ for $i\in[0,\pi/2]$.
+The fraction of galaxiess seen from a line of sight that lies within an angle $x$ of the symmetry axis is given by
+
+$$
+f_{\textrm{axis}} = \frac{\int_0^x di\sin i}{\int_0^{\pi/2} di\sin i} = 1 - \cos x.
+$$
+
+<!-- ======================= -->
+<!-- PROBLEM 1.5            -->
+<!-- ======================= -->
+## Problem 1.5
+
+
 
 <!-- ======================= -->
 <!-- PROBLEM 1.11            -->
