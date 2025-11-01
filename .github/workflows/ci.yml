@@ -52,4 +52,6 @@ jobs:
         run: uv run mypy ${PROJECT_FILES}
 
       - name: pytest
-        run: uv run pytest
+        run: |
+          mkdir -p docs/assets/generated
+          uv run pytest
