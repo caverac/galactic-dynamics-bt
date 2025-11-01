@@ -16,6 +16,7 @@ window.MathJax = {
       rmMyr: "\\mathrm{Myr}",
       rmGyr: "\\mathrm{Gyr}",
       rmkm: "\\mathrm{km}",
+      rms: "\\mathrm{s}",
       rmms: "\\mathrm{m\\,s}",
       rmkms: "\\mathrm{km\\,s}",
       // Solar system units

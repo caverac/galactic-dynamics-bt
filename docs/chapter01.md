@@ -291,14 +291,94 @@ $$
 <!-- ======================= -->
 ## Problem 1.5
 
+### a. Mass-to-light ratio
+The luminosity can be calculate from the observed flux $F$ as
 
+$$
+L = 4\pi d_L^2 F,
+$$
+
+where $d_L$ is the luminosity distance, which for small redshifts can be approximated as
+
+$$
+d_L \approx \frac{cz}{H_0}.
+$$
+
+That is $L \propto d_L^2 \propto H_0^{-2} \propto h_7^{-2}$, hence $\Upsilon_R \propto h_7^{-2}$.
+
+### b. Correcting Zwicky's estimate
+
+Assuming
+
+$$
+H_0 = 558 \rmkm/\rms^{-1}\rmMpc^{-1} = 70(7.97) \rmkm/\rms^{-1}\rmMpc^{-1}
+$$
+
+Since $\Gamma \propto h_7^2$, his estimated mass-to-light ratio should be corrected by a factor or $7.97^{-2}$, that is, his corrected estimadated value for the mass-to-light ratio is $~6$.
+
+
+<!-- ======================= -->
+<!-- PROBLEM 1.6             -->
+<!-- ======================= -->
+## Problem 1.6
+
+In a flat universe completely dominated by $\Lambda$ we have
+
+$$
+a(t) \propto \exp\left(H_0t\right) = \exp\left[\left(\frac{8\pi G \rho_\Lambda}{3}\right)^{1/2}t\right].
+$$
+
+$(G\rho_\Lambda)^{-1/2}$ is then the e-folding time of expansion.
+
+<!-- ======================= -->
+<!-- PROBLEM 1.7             -->
+<!-- ======================= -->
+## Problem 1.7
+
+Let's start from
+
+$$
+dr^2 = a^2(t)\left[\frac{dx^2}{1 - kx^2/x_u^2} + x^2(d\theta^2 + \sin^2\theta d\phi^2)\right].
+$$
+
+For $k=+1$ the spatial metric is a diagonal with components
+
+$$
+g_{xx} = \frac{a^2(t)}{1 - x^2/x_u^2}, \quad g_{\theta\theta} = a^2(t)x^2, \quad g_{\phi\phi} = a^2(t)x^2\sin^2\theta.
+$$
+
+So the determinant is given by
+
+$$
+\det g_3 = \frac{a^6(t)x^4\sin^2\theta}{(1 - x^2/x_u^2)},
+$$
+
+and the 3-volume is
+
+$$
+V/2 = \int dxd\theta d\phi\sqrt{\det g_3} = a^3(t) \int_0^{x_u} dx \frac{x^2}{\sqrt{1 - x^2/x_u^2}} \int_0^\pi d\theta \sin\theta \int_0^{2\pi} d\phi = \pi^2 a^3(t) x_u^3.
+$$
+
+Note that we integrated only over half the 3-sphere, hence the factor of $1/2$ in the left-hand side.
+The 3-sphere of radius $x_u$ can be embedded in 4D Euclidean space, when we run the integral on the right-hand side, we are only integrating over half the 3-sphere, hence the factor of $1/2$ in the left-hand side.
+
+The volume of the universe is then
+
+$$
+V = 2\pi^2 a^3(t) x_u^3.
+$$
+
+<!-- ======================= -->
+<!-- PROBLEM 1.8             -->
+<!-- ======================= -->
+## Problem 1.8
 
 <!-- ======================= -->
 <!-- PROBLEM 1.11            -->
 <!-- ======================= -->
 ## Problem 1.11
 
-From Eq.~(1.50) we know that
+From Eq. (1.50) we know that
 
 $$
 \dot{a}^2 - \frac{8\pi G \rho}{3}a^2 = 2E.
