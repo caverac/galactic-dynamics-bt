@@ -154,7 +154,7 @@ def plot_sersic_profile() -> None:
     )
 
     axs.set_xlabel(r"$\log_{10}r/R_e$")
-    axs.set_ylabel(r"$\log_{10}j(r)/I_eR_e$")
+    axs.set_ylabel(r"$\log_{10}j(r)R_e/I_e$")
     axs.set_xlim(-2, 2)
 
     # configure ticks

@@ -57,14 +57,14 @@ $$
 $$
 
 !!! warning "Potential error"
-    For Neptune, and $\rho = 0.1 \Msun/\rmpc^3$, we get $\delta\varpi = -1.5\times 10^{-8}\rmarcsec/\rmyr$ this differs from the value given in Binney & Tremaine (2008) by six orders of magnitude; unfortunately I cannot come up with a better derivation that can explain the discrepancy.
+    For Neptune, and $\rho = 0.1 \Msun/\rmpc^3$, we get $\delta\varpi = -1.5\times 10^{-8}\rmarcsec/\rmyr$ this differs from the value given in Binney & Tremaine (2008) [@binneytremaine2008] by six orders of magnitude; unfortunately I cannot come up with a better derivation that can explain the discrepancy.
 
 <!-- ======================= -->
 <!-- PROBLEM 1.2             -->
 <!-- ======================= -->
 ## Problem 1.2
 
-### a. luminosity density to surface brightness
+### a. Luminosity density to surface brightness
 Using the same construct of Fig. 2.3 define $R, z$ such that $r^2 = R^2 + z^2$. The surface brightness at projected radius $R$ is given by
 
 $$
@@ -146,9 +146,8 @@ $$
 A numerical implementation of the inversion formula is implemented in the solutions module
 
 ```python
-from galactic_dynamics_bt.chapter01.sersic_profile import plot_sersic_profile
-
-plot_sersic_profile()
+>>> from galactic_dynamics_bt.chapter01.sersic_profile import plot_sersic_profile
+>>> plot_sersic_profile()
 ```
 
 
@@ -157,11 +156,329 @@ plot_sersic_profile()
 *Figure P1.2: Sersic luminosity density profile derived from the surface brightness profile using the inversion formula. For comparison different values of the parameter $m$ are shown.*
 
 <!-- ======================= -->
+<!-- PROBLEM 1.3            -->
+<!-- ======================= -->
+## Problem 1.3
+
+### a. Strip brightness
+
+$$
+\begin{align}
+S(x) &= \int_{-\infty}^{+\infty} dy I(\sqrt{x^2 + y^2}) \\
+&= 2\int_{0}^{+\infty} dy I(\sqrt{x^2 + y^2}) \quad\text{with}\quad R^2 = x^2 + y^2 \\
+&= 2\int_x^\infty dR \frac{R I(R)}{\sqrt{R^2 - x^2}}
+\end{align}
+$$
+
+### b. From strip brightness to brightness profiles
+
+Start with
+
+$$
+\begin{align}
+S(x) &= 2\int_x^\infty dR \frac{R I(R)}{\sqrt{R^2 - x^2}} \\
+&= 4\int_x^\infty dR\int_R^\infty dr \frac{r j(r)}{\sqrt{r^2 - R^2}\sqrt{R^2 - x^2}} \\
+&= 4\int_x^\infty dr r j(r) \underbrace{\int_x^r dR \frac{R}{\sqrt{r^2 - R^2}\sqrt{R^2 - x^2}}}_{\pi/2} \\
+&= 2\pi\int_x^\infty dr r j(r).
+\end{align}
+$$
+
+Taking the derivative with respect to $x$ we have
+
+$$
+j(x) = -\frac{1}{2\pi x}\frac{dS}{dx}.
+$$
+
+The cumulative luminosity inside radius $r$ is given by
+
+
+$$
+L(r) = 4\pi \int_0^r dx x^2 j(x) = 4\pi \int_0^r dx x^2\left[-\frac{1}{2\pi x}\frac{dS}{dx}\right] = -2\int_0^r dx x \frac{dS}{dx}.
+$$
+
+
+<!-- ======================= -->
+<!-- PROBLEM 1.4            -->
+<!-- ======================= -->
+## Problem 1.4
+
+### a. Central surface brightness of an axisymmetric galaxy
+We are assuming the axisymmetric density density distribution $j$ can be written as
+
+$$
+j = j(m) \quad\text{ with }\quad m^2 = R^2 + \frac{z^2}{q^2}.
+$$
+
+The projected surface brightness is simple the line-of-sight integral of the luminosity density
+
+$$
+I(R) = \int_{-\infty}^{+\infty} ds j(m).
+$$
+
+where $s$ measures distance along the line of sight. Let's consider two cases
+
+**Face-on view** For a face-on line of sight, we have $R = 0$ and $m = z/q$, thus the central intensity is
+
+$$
+I_n = 2\int_0^\infty dz j(m) = 2q\int_0^\infty dm j(m).
+$$
+
+**Inclined view** The coodinate transformation for the central line of sight inclined by an angle $i$ is given by $R = s\sin i$ and $z = s\cos i$, so that the ellipsoidal radius along the line of sight is given by
+
+$$
+m^2 = s^2\sin^2 i + \frac{s^2\cos^2 i}{q^2} = s^2\left(\sin^2 i + \frac{\cos^2 i}{q^2}\right).
+$$
+
+Which means that
+
+$$
+\frac{dm}{ds} = \sqrt{\sin^2 i + \frac{\cos^2 i}{q^2}},
+$$
+
+and
+
+$$
+I_0(i) = 2\int_0^\infty ds j(m) = 2\int_0^\infty dm \frac{j(m)}{dm/ds} = \frac{2}{\sqrt{\sin^2 i + \cos^2 i/q^2}}\int_0^\infty dm j(m).
+$$
+
+The ratio is then
+
+$$
+\frac{I_0(i)}{I_n} = \frac{1/q}{\sqrt{\sin^2 i + \cos^2 i/q^2}}
+$$
+
+We now consider two cases depending on $q$
+
+**Oblate case** ($q<1$) In this case $Q^2 = \cos^2 i + q^2\sin^2 i < 1$ and we can write
+
+$$
+I_0 = \frac{I_n}{Q}
+$$
+
+$Q$ decreases from $1$ (face-on) to $q$ (edge-on).
+
+**Prolate case** ($q>1$) In this case $Q^2 = \sin^2 i + \cos^2 i/q^2 < 1$ and we can write
+
+$$
+I_0 = \frac{I_n}{\sqrt{q^2 + 1 - q^2Q^2}}
+$$
+
+$Q$ decreases from $1$ (viewed along the long axis) to $1/q$ (viewed perpendicular to it).
+
+### b. Relation between apparent and intrinsic axis ratios
+
+The relation is given by
+
+$$
+\begin{align}
+Q^2 &= \cos^2 i + q^2\sin^2 i, \quad\text{oblate case}\\
+Q^2 &= \sin^2 i + \frac{\cos^2 i}{q^2}, \quad\text{prolate case}
+\end{align}
+$$
+
+### c. Probability distribution of apparent axis ratios
+
+For random orientation, the inclination $u$ has a PDF $p(i) = \sin i$ for $i\in[0,\pi/2]$.
+The fraction of galaxiess seen from a line of sight that lies within an angle $x$ of the symmetry axis is given by
+
+$$
+f_{\textrm{axis}} = \frac{\int_0^x di\sin i}{\int_0^{\pi/2} di\sin i} = 1 - \cos x.
+$$
+
+<!-- ======================= -->
+<!-- PROBLEM 1.5            -->
+<!-- ======================= -->
+## Problem 1.5
+
+### a. Mass-to-light ratio
+The luminosity can be calculate from the observed flux $F$ as
+
+$$
+L = 4\pi d_L^2 F,
+$$
+
+where $d_L$ is the luminosity distance, which for small redshifts can be approximated as
+
+$$
+d_L \approx \frac{cz}{H_0}.
+$$
+
+That is $L \propto d_L^2 \propto H_0^{-2} \propto h_7^{-2}$, hence $\Upsilon_R \propto h_7^{-2}$.
+
+### b. Correcting Zwicky's estimate
+
+Assuming
+
+$$
+H_0 = 558 \rmkm/\rms^{-1}\rmMpc^{-1} = 70(7.97) \rmkm/\rms^{-1}\rmMpc^{-1}
+$$
+
+Since $\Gamma \propto h_7^2$, his estimated mass-to-light ratio should be corrected by a factor or $7.97^{-2}$, that is, his corrected estimadated value for the mass-to-light ratio is $~6$.
+
+
+<!-- ======================= -->
+<!-- PROBLEM 1.6             -->
+<!-- ======================= -->
+## Problem 1.6
+
+In a flat universe completely dominated by $\Lambda$ we have
+
+$$
+a(t) \propto \exp\left(H_0t\right) = \exp\left[\left(\frac{8\pi G \rho_\Lambda}{3}\right)^{1/2}t\right].
+$$
+
+$(G\rho_\Lambda)^{-1/2}$ is then the e-folding time of expansion.
+
+<!-- ======================= -->
+<!-- PROBLEM 1.7             -->
+<!-- ======================= -->
+## Problem 1.7
+
+Let's start from
+
+$$
+dr^2 = a^2(t)\left[\frac{dx^2}{1 - kx^2/x_u^2} + x^2(d\theta^2 + \sin^2\theta d\phi^2)\right].
+$$
+
+For $k=+1$ the spatial metric is a diagonal with components
+
+$$
+g_{xx} = \frac{a^2(t)}{1 - x^2/x_u^2}, \quad g_{\theta\theta} = a^2(t)x^2, \quad g_{\phi\phi} = a^2(t)x^2\sin^2\theta.
+$$
+
+So the determinant is given by
+
+$$
+\det g_3 = \frac{a^6(t)x^4\sin^2\theta}{(1 - x^2/x_u^2)},
+$$
+
+and the 3-volume is
+
+$$
+V/2 = \int dxd\theta d\phi\sqrt{\det g_3} = a^3(t) \int_0^{x_u} dx \frac{x^2}{\sqrt{1 - x^2/x_u^2}} \int_0^\pi d\theta \sin\theta \int_0^{2\pi} d\phi = \pi^2 a^3(t) x_u^3.
+$$
+
+Note that we integrated only over half the 3-sphere, hence the factor of $1/2$ in the left-hand side.
+The 3-sphere of radius $x_u$ can be embedded in 4D Euclidean space, when we run the integral on the right-hand side, we are only integrating over half the 3-sphere, hence the factor of $1/2$ in the left-hand side.
+
+The volume of the universe is then
+
+$$
+V = 2\pi^2 a^3(t) x_u^3.
+$$
+
+<!-- ======================= -->
+<!-- PROBLEM 1.8             -->
+<!-- ======================= -->
+## Problem 1.8
+
+### a. Static universe
+
+Start from the acceleration equation (1.49)
+
+$$
+\frac{\ddot{a}}{a} = -\frac{4\pi G}{3}\left(\rho + \frac{3p}{c^2}\right).
+$$
+
+For a static universe $\ddot{a} = 0$, if $\rho_\gamma = 0$, then this equation implies that
+
+$$
+\begin{align}
+0 &= -\frac{4\pi G}{3}\left((\rho_m + \rho_\Lambda) + \frac{3p}{c^2}(p_m + p_\Lambda)\right) \\
+&= -\frac{4\pi G}{3}\left(\rho_m + \rho_\Lambda + \frac{3}{c^2}(0 -\rho_\Lambda c^2)\right) \\
+&= -\frac{4\pi G}{3}\left(\rho_m + \rho_\Lambda - 3\rho_\Lambda\right) \\
+\end{align}
+$$
+
+which means that
+
+$$
+\rho_m = 2\rho_\Lambda.
+$$
+
+### b. Unstable universe
+
+Consider the perturbation $a(t) = a_0 + \delta a_1(t) = a_0[1 + \epsilon x(t)]$ around the static solution $a_0$, with $x(t) \equiv a_1(t) / a_0$ and $\epsilon \ll 1$. Each component of the density evolves as
+
+| Component | Density evolution | Perturbation |
+|-----------|-------------------|--------------|
+| Matter    | $\rho_m(t) = \rho_{m0}\left(\frac{a(t)}{a_0}\right)^{-3} \approx \rho_{m0}(1 - 3\epsilon x(t))$ | $\delta \rho_m(t) \approx -3\epsilon \rho_{m0} x(t)$ |
+| Dark energy | $\rho_\Lambda(t) = \rho_{\Lambda 0}$ | $\delta \rho_\Lambda(t) = 0$ |
+
+The perturbed acceleration equation becomes
+
+$$
+\begin{align}
+\delta(\ddot{a}/a) &= -\frac{4\pi G}{3}\left(\delta \rho_m + \delta \rho_\Lambda + \frac{3}{c^2}(\delta p_m + \delta p_\Lambda)\right) \\
+&= -\frac{4\pi G}{3}(-3\epsilon \rho_{m0} x(t)) = 4\pi G \epsilon \rho_{m0} x(t)\\
+\epsilon \ddot{x} &= 4\pi G \epsilon \rho_{m0} x(t).
+\end{align}
+$$
+
+Whose solution is
+
+$$
+x(t) = A e^{\sqrt{4\pi G \rho_{m0}}t} + B e^{-\sqrt{4\pi G \rho_{m0}}t}.
+$$
+
+where $A$ and $B$ are constants determined by the initial conditions.
+The perturbation grows exponentially with time, with characteristic timescale
+
+$$
+t_{\textrm{inst}} = \frac{1}{\sqrt{4\pi G \rho_{m0}}}.
+$$
+
+
+<!-- ======================= -->
+<!-- PROBLEM 1.9            -->
+<!-- ======================= -->
+## Problem 1.9
+
+For a flat universe,
+
+$$
+H^2 = \frac{\dot{a}^2}{a^2} = \frac{8\pi G}{3}\left( \rho_{m0}a^{-3} + \rho_{\Lambda 0}\right) =
+H_0^2\left(\Omega_{m0}a^{-3} + \Omega_{\Lambda 0}\right).
+$$
+
+In the distant future, $a\gg 1$, the matter term becomes negligible and we have
+
+$$
+H_\infty^2 \approx H_0^2 \Omega_{\Lambda 0} < H_0^2.
+$$
+
+The timescale for the expansion is then $a(t)\approx e^{H_\infty t}$, which is accelerated expansion since $\ddot{a} = H_\infty^2 e^{H_\infty t} > 0$.
+
+<!-- ======================= -->
+<!-- PROBLEM 1.10            -->
+<!-- ======================= -->
+## Problem 1.10
+
+The mean free path has the form
+
+$$
+\ell = \frac{1}{n\pi r^2} = \frac{4r \rho_{\rm int}}{3\Omega_a \rho_c},
+$$
+
+where $\rho_{\rm int}$ is the internal density of the asteroids, $\rho_c$ is the critical density of the universe, and $\Omega_a$ is the cosmological density parameter of asteroids. Requiring that the Universe is optically thin to distance quasars over a Hubble distance $D \sim c / H_0$ gives
+
+$$
+\tau \sim \frac{D}{\ell} \lesssim 1 \implies r \gtrsim \frac{3\Omega_a \rho_c}{4\rho_{\rm int}} \frac{c}{H_0}.
+$$
+
+Using $\rho_c = 1.88\times 10^{-29} h^2 \, \mathrm{g \, cm^{-3}}$, $c / H_0 \simeq 9.26\times 10^{27} h^{-1} \, \mathrm{cm}$, $\Omega_a = 0.1$ and $\rho_{\rm int} = 8 \, \mathrm{g \, cm^{-3}}$, we find
+
+$$
+r_{\min} \approx 1~\mu\mathrm{m}.
+$$
+
+<!-- ======================= -->
 <!-- PROBLEM 1.11            -->
 <!-- ======================= -->
 ## Problem 1.11
 
-From Eq.~(1.50) we know that
+### a. Bound vs. unbound universes
+From Eq. (1.50) we know that
 
 $$
 \dot{a}^2 - \frac{8\pi G \rho}{3}a^2 = 2E.
@@ -175,11 +492,14 @@ $$
 
 The boundary between a bound and unbound universe is then given by $k=0$ or $\Omega_{\Lambda 0} + \Omega_{m0} = 1$.
 
-Now, Eq.~(1.49) can be rewritten as
+
+### b. Accelerating vs. decelerating universes
+Now, Eq. (1.49) can be rewritten as
 
 $$
 \frac{\ddot{a}}{a} = \frac{H_0^2}{2}(2\Omega_{\Lambda 0} - \Omega_{m0}a^{-3}).
 $$
+
 
 The transition between a decelerating and accelerating universe occurs when $\ddot{a} = 0$, for all values of $a$, in particular at present day $a_0 = 1$, this happens when
 
@@ -187,6 +507,154 @@ $$
 2\Omega_{\Lambda 0} - \Omega_{m0} = 0
 $$
 
+### c. Recollpapse vs. expand forever
+
+Let's write the Friedmann equation as
+
+$$
+\frac{H^2}{H_0^2} = \Omega_{m0}a^{-3} + \Omega_{\Lambda 0} + (1 - \Omega_{m0} - \Omega_{\Lambda 0})a^{-2}.
+$$
+
+A condition for recollapse is that there exists a time $t_{\textrm{coll}}$ when $H(t_{\textrm{coll}}) = 0$, or equivalently a scale factor $a_{\textrm{coll}} > 1$ such that
+
+$$
+\Omega_{m0}a^{-3} + \Omega_{\Lambda 0} + (1 - \Omega_{m0} - \Omega_{\Lambda 0})a^{-2} = 0.
+$$
+
+Define the function
+
+$$
+f(a) = \Omega_{\Lambda 0}a^{3} + (1 - \Omega_{m0} - \Omega_{\Lambda 0})a + \Omega_{m0}.
+$$
+
+The separatrix in the parameter space between recollapsing and ever-expanding universes is given by the condition that $f(a)$ has a double root at some $a = a_{\textrm{coll}} > 1$. This requires that both $f(a_{\textrm{coll}}) = 0$ and $f'(a_{\textrm{coll}}) = 0$.
+
+$$
+0 = 3\Omega_{\Lambda 0}a^2 + (1 - \Omega_{m0} - \Omega_{\Lambda 0})
+$$
+
+A parametric solution of the separatrix is given by
+
+$$
+\Omega_{m0} = \frac{2 a^3}{1 - 3 a^2 + 2 a^3}, \quad
+\Omega_{\Lambda 0} = \frac{1}{1 - 3 a^2 + 2 a^3}, \quad a > 1.
+$$
+
+
+A plot of the different regions in the $\Omega_{m0}$-$\Omega_{\Lambda 0}$ plane is shown below, generated with the following code:
+
+```python
+>>> from galactic_dynamics_bt.chapter01.frw_model import plot_frw_model
+>>> plot_frw_model()
+```
+
 ![FRW Model Phase Diagram](assets/generated/frw_model.png)
 
 *Figure P1.11: Phase diagram of FRW cosmological models in the $\Omega_{m0}$-$\Omega_{\Lambda 0}$ plane. The solid line indicates the boundary between bound and unbound models, while the dashed line indicates the boundary between decelerating and accelerating models.*
+
+<!-- ======================= -->
+<!-- PROBLEM 1.12            -->
+<!-- ======================= -->
+## Problem 1.12
+
+The age of the universe at redshift $z$ can be computed as
+
+```python
+>>> from galactic_dynamics_bt.chapter01.universe_age import find_universe_age
+>>> z = 0
+>>> h7 = 1.05
+>>> print(
+...     z,
+...     find_universe_age(
+...         z,
+...        omega_m0=0.237,
+...        omega_lambda0=0.763,
+...        omega_gamma0=8.84e-5 / h7**2,
+...        H0=70.0 * h7,
+...    ),
+...)
+14.26742...
+```
+
+For different redshifts we have
+
+| Redshift | Age of the universe |
+|----------|---------------------|
+| 0        | 14.267 Gyr          |
+| 1        | 6.3286 Gyr          |
+| 1000     | 0.4605 Myr          |
+
+The next figure shows the age of the universe as a function of redshift.
+
+```python
+from galactic_dynamics_bt.chapter01.universe_age import plot_universe_age
+plot_universe_age()
+```
+
+![Age of the Universe vs Redshift](assets/generated/universe_age.png)
+*Figure P1.12: Age of the universe as a function of redshift for flat cosmologies. Solid line represents the cosmology of Eq (1.73), dashed line are the results of the Planck 2018 cosmology [@planck2018].*
+
+
+<!-- ======================= -->
+<!-- PROBLEM 1.13            -->
+<!-- ======================= -->
+## Problem 1.13
+
+
+### a. Scale factor at matter-radiation equality
+Matter density scales as $\rho_m \propto a^{-3}$, while radiation density scales as $\rho_\gamma \propto a^{-4}$. The equality between matter and radiation densities occurs when
+
+$$
+\rho_m = \rho_\gamma \Rightarrow \Omega_{m0} a^{-3} = \Omega_{\gamma 0} a^{-4} \Rightarrow \Omega_{m0} a = \Omega_{\gamma 0}.
+$$
+
+This implies that the equality occurs at a scale factor
+
+$$
+1 + z_{\gamma m} = \frac{1}{a_{\gamma m}} = \frac{\Omega_{m0}}{\Omega_{\gamma 0}}
+= 1.18\times 10^4 h_7^2 \Omega_{m0}.
+$$
+
+
+### b. Age of the universe at matter-radiation equality
+
+Using the subsitution $u = \Omega_{\gamma 0} + a \Omega_{m 0}$ we can show that (For $\Omega_\Lambda = 0$)
+
+$$
+H_0t = \int_0^{\Omega_{\gamma 0}/\Omega_{m0}} da \frac{a}{\sqrt{\Omega_{m0} a + \Omega_{\gamma 0}}} =
+2(2 - 2^{1/2})\frac{\Omega_{\gamma 0}^{1/2}(1 - \Omega_{m0})}{3\Omega_{m0}^2}.
+$$
+
+Since $\Omega_{m0} + \Omega_{\gamma 0} = 1$, we have that the age of the universe at matter-radiation equality is
+
+$$
+t_{\gamma m} = \frac{2(2 - 2^{1/2})}{3H_0}\frac{\Omega_{\gamma 0}^{3/2}}{\Omega_{m0}^2}.
+$$
+
+### c. Comoving horizon at matter-radiation equality
+
+The comoving horizon at matter-radiation equality is given by
+
+$$
+x_{\gamma m} = c\int_0^{t_{\gamma m}} \frac{dt}{a(t)} = c\int_0^{a_{\gamma m}} \frac{da}{a^2 H(a)}
+= c\int_0^{a_{\gamma m}} \frac{da}{H_0\sqrt{\Omega_{m0} a + \Omega_{\gamma 0}}}.
+$$
+
+Similarly as before, using the substitution $u = \Omega_{\gamma 0} + a \Omega_{m 0}$ we can show that
+
+$$
+x_{\gamma m} = (2^{1/2} - 1)\frac{c}{H_0} \frac{\Omega_{\gamma 0}^{1/2}}{\Omega_{m0}}.
+$$
+
+<!-- ======================= -->
+<!-- PROBLEM 1.14            -->
+<!-- ======================= -->
+## Problem 1.14
+The universe is not opaque for $z \lesssim 6$ even though it's reionized because the mean electron density is now extremely low due to cosmic expansion, so the Thomson scattering optical depth is tiny, and photons can propagate freely.
+
+<!-- ======================= -->
+<!-- REFERENCES.             -->
+<!-- ======================= -->
+
+## References
+\bibliography

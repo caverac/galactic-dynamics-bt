@@ -84,8 +84,8 @@ class TestFRWModel:
                 plot_frw_models()
 
             # Verify plot elements are added
-            assert mock_ax.plot.call_count == 2  # Two lines plotted
-            assert mock_ax.text.call_count == 2  # Two text labels
+            assert mock_ax.plot.call_count == 4  # Four lines plotted
+            assert mock_ax.text.call_count == 7  # Seven text labels
 
     def test_plot_frw_models_configures_tick_params(self) -> None:
         """Test that tick parameters are properly configured."""
