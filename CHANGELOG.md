@@ -13,6 +13,21 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Testing infrastructure with pytest
 - Code quality tools (black, flake8, pylint, mypy)
 - MIT license and contribution guidelines
+## v0.3.0 (2025-11-01)
+
+### Feat
+
+- chapter 01 problems completed
+- completed problems 1.13-1.14
+- completed problems 1.11-1.12
+- completed problems 1.8-1.10
+- completed problems 1.5-1.7
+- completed problems 1.3-1.4
+
+### Fix
+
+- **generate_assets**: added plot_univers_age
+
 ## v0.2.1 (2025-10-31)
 
 ### Fix
