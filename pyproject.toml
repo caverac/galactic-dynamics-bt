@@ -1,6 +1,6 @@
 [project]
 name = "galactic-dynamics-bt"
-version = "0.3.0"
+version = "0.3.1"
 description = "Solutions to the problem sets from Binney & Tremaine's Galactic Dynamics (2nd Edition)."
 readme = "README.md"
 requires-python = ">=3.12"

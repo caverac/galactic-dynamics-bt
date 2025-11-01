@@ -13,6 +13,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Testing infrastructure with pytest
 - Code quality tools (black, flake8, pylint, mypy)
 - MIT license and contribution guidelines
+## v0.3.1 (2025-11-01)
+
+### Fix
+
+- **chapter-01**: split into sections
+
 ## v0.3.0 (2025-11-01)
 
 ### Feat
