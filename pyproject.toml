@@ -79,6 +79,10 @@ disable = [
     "duplicate-code",
 ]
 
+[tool.pylint.IMPORTS]
+# Allow imports that might not be available in all environments
+ignored-modules = ["pytest"]
+
 [tool.pydocstyle]
 convention = "numpy"
 

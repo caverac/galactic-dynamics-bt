@@ -57,7 +57,7 @@ $$
 $$
 
 !!! warning "Potential error"
-    For Neptune, and $\rho = 0.1 \Msun/\rmpc^3$, we get $\delta\varpi = -1.5\times 10^{-8}\rmarcsec/\rmyr$ this differs from the value given in Binney & Tremaine (2008) by six orders of magnitude; unfortunately I cannot come up with a better derivation that can explain the discrepancy.
+    For Neptune, and $\rho = 0.1 \Msun/\rmpc^3$, we get $\delta\varpi = -1.5\times 10^{-8}\rmarcsec/\rmyr$ this differs from the value given in Binney & Tremaine (2008) [@binneytremaine2008] by six orders of magnitude; unfortunately I cannot come up with a better derivation that can explain the discrepancy.
 
 <!-- ======================= -->
 <!-- PROBLEM 1.2             -->
@@ -146,9 +146,8 @@ $$
 A numerical implementation of the inversion formula is implemented in the solutions module
 
 ```python
-from galactic_dynamics_bt.chapter01.sersic_profile import plot_sersic_profile
-
-plot_sersic_profile()
+>>> from galactic_dynamics_bt.chapter01.sersic_profile import plot_sersic_profile
+>>> plot_sersic_profile()
 ```
 
 
@@ -478,6 +477,7 @@ $$
 <!-- ======================= -->
 ## Problem 1.11
 
+### a. Bound vs. unbound universes
 From Eq. (1.50) we know that
 
 $$
@@ -492,11 +492,14 @@ $$
 
 The boundary between a bound and unbound universe is then given by $k=0$ or $\Omega_{\Lambda 0} + \Omega_{m0} = 1$.
 
-Now, Eq.~(1.49) can be rewritten as
+
+### b. Accelerating vs. decelerating universes
+Now, Eq. (1.49) can be rewritten as
 
 $$
 \frac{\ddot{a}}{a} = \frac{H_0^2}{2}(2\Omega_{\Lambda 0} - \Omega_{m0}a^{-3}).
 $$
+
 
 The transition between a decelerating and accelerating universe occurs when $\ddot{a} = 0$, for all values of $a$, in particular at present day $a_0 = 1$, this happens when
 
@@ -504,6 +507,92 @@ $$
 2\Omega_{\Lambda 0} - \Omega_{m0} = 0
 $$
 
+### c. Recollpapse vs. expand forever
+
+Let's write the Friedmann equation as
+
+$$
+\frac{H^2}{H_0^2} = \Omega_{m0}a^{-3} + \Omega_{\Lambda 0} + (1 - \Omega_{m0} - \Omega_{\Lambda 0})a^{-2}.
+$$
+
+A condition for recollapse is that there exists a time $t_{\textrm{coll}}$ when $H(t_{\textrm{coll}}) = 0$, or equivalently a scale factor $a_{\textrm{coll}} > 1$ such that
+
+$$
+\Omega_{m0}a^{-3} + \Omega_{\Lambda 0} + (1 - \Omega_{m0} - \Omega_{\Lambda 0})a^{-2} = 0.
+$$
+
+Define the function
+
+$$
+f(a) = \Omega_{\Lambda 0}a^{3} + (1 - \Omega_{m0} - \Omega_{\Lambda 0})a + \Omega_{m0}.
+$$
+
+The separatrix in the parameter space between recollapsing and ever-expanding universes is given by the condition that $f(a)$ has a double root at some $a = a_{\textrm{coll}} > 1$. This requires that both $f(a_{\textrm{coll}}) = 0$ and $f'(a_{\textrm{coll}}) = 0$.
+
+$$
+0 = 3\Omega_{\Lambda 0}a^2 + (1 - \Omega_{m0} - \Omega_{\Lambda 0})
+$$
+
+A parametric solution of the separatrix is given by
+
+$$
+\Omega_{m0} = \frac{2 a^3}{1 - 3 a^2 + 2 a^3}, \quad
+\Omega_{\Lambda 0} = \frac{1}{1 - 3 a^2 + 2 a^3}, \quad a > 1.
+$$
+
+
+A plot of the different regions in the $\Omega_{m0}$-$\Omega_{\Lambda 0}$ plane is shown below, generated with the following code:
+
+```python
+>>> from galactic_dynamics_bt.chapter01.frw_model import plot_frw_model
+>>> plot_frw_model()
+```
+
 ![FRW Model Phase Diagram](assets/generated/frw_model.png)
 
 *Figure P1.11: Phase diagram of FRW cosmological models in the $\Omega_{m0}$-$\Omega_{\Lambda 0}$ plane. The solid line indicates the boundary between bound and unbound models, while the dashed line indicates the boundary between decelerating and accelerating models.*
+
+<!-- ======================= -->
+<!-- PROBLEM 1.12            -->
+<!-- ======================= -->
+## Problem 1.12
+
+The age of the universe at redshift $z$ can be computed as
+
+```python
+>>> from galactic_dynamics_bt.chapter01.universe_age import find_universe_age
+>>> z = 0
+>>> h7 = 1.05
+>>> print(
+...     z,
+...     find_universe_age(
+...         z,
+...        omega_m0=0.237,
+...        omega_lambda0=0.763,
+...        omega_gamma0=8.84e-5 / h7**2,
+...        H0=70.0 * h7,
+...    ),
+...)
+14.26742...
+```
+
+For different redshifts we have
+
+| Redshift | Age of the universe |
+|----------|---------------------|
+| 0        | 14.267 Gyr          |
+| 1        | 6.3286 Gyr          |
+| 1000     | 0.4605 Myr          |
+
+The next figure shows the age of the universe as a function of redshift.
+
+```python
+from galactic_dynamics_bt.chapter01.universe_age import plot_universe_age
+plot_universe_age()
+```
+
+![Age of the Universe vs Redshift](assets/generated/universe_age.png)
+*Figure P1.12: Age of the universe as a function of redshift for flat cosmologies. Solid line represents the cosmology of Eq (1.73), dashed line are the results of the Planck 2018 cosmology [@planck2018].*
+
+## References
+\bibliography

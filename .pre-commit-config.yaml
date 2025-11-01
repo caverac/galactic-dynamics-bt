@@ -27,6 +27,7 @@ repos:
           - numpy
           - scipy
           - matplotlib
+          - dacite
 
   # pydocstyle - Docstring style checker
   - repo: https://github.com/pycqa/pydocstyle
@@ -43,6 +44,7 @@ repos:
           - numpy
           - scipy-stubs>=1.11.0
           - matplotlib
+          - dacite
 
   # Optional: pytest (commented out as requested)
   # - repo: local

@@ -51,13 +51,31 @@ def plot_frw_models() -> None:
     x = np.linspace(0, 3, 100)
     y = np.ones_like(x) - x
     axs.plot(x, y, "-k", lw=1.5)
-    axs.text(0.5, 0.4, "Open", ha="center", va="center", rotation=-40)
-    axs.text(0.6, 0.5, "Closed", ha="center", va="center", rotation=-40)
+    axs.text(0.5, 0.4, "open", ha="center", va="center", rotation=-45, transform_rotates_text=True)
+    axs.text(0.6, 0.5, "closed", ha="center", va="center", rotation=-45, transform_rotates_text=True)
 
     # accelerating-decelerating model
     x = np.linspace(0, 2.5, 100)
     y = 0.5 * x
     axs.plot(x, y, "--k", lw=1.5)
+    axs.text(1.2, 0.7, "accelerating", ha="center", va="center", rotation=30, transform_rotates_text=True)
+    axs.text(1.2, 0.5, "decelerating", ha="center", va="center", rotation=30, transform_rotates_text=True)
+
+    # recollapse-expands forever model
+    a = np.logspace(0.1, 4, 100)
+    x = 2 * a**3 / (1 - 3 * a**2 + 2 * a**3)
+    y = 1 / (1 - 3 * a**2 + 2 * a**3)
+    axs.plot(x, y, "k", lw=1.5)
+    axs.text(2.1, -0.02, "recollapses", ha="center", va="center", rotation=8, transform_rotates_text=True)
+    axs.text(2.1, 0.14, "expands forever", ha="center", va="center", rotation=8, transform_rotates_text=True)
+
+    # recollapse-expands forever model
+    a = np.logspace(-1, -0.1, 100)
+    x = 2 * a**3 / (1 - 3 * a**2 + 2 * a**3)
+    y = 1 / (1 - 3 * a**2 + 2 * a**3)
+    axs.plot(x, y, "k", lw=1.5)
+    axs.fill_between(x, y.max() * np.ones_like(x), y, hatch=r"\\\\", edgecolor="black", facecolor="none")
+    axs.text(0.3, 1.5, "bounce", ha="center", va="center", rotation=60, transform_rotates_text=True)
 
     fig.savefig(
         "docs/assets/generated/frw_model.png",

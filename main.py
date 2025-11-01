@@ -1,9 +1,9 @@
 """MkDocs macros for dynamic version from pyproject.toml."""
 
-import tomllib
-from pathlib import Path
-from typing import Any, Callable, Dict, Protocol
 from dataclasses import dataclass
+from pathlib import Path
+import tomllib
+from typing import Any, Callable, Dict, Protocol
 
 from dacite import from_dict
 
@@ -14,7 +14,7 @@ class MacroEnvironment(Protocol):
     variables: Dict[str, Any]
 
     def macro(self, func: Callable[..., Any]) -> Callable[..., Any]:
-        """Decorator to register a macro function."""
+        """Register a macro function."""
         ...
 
 
