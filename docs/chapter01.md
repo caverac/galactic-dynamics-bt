@@ -594,5 +594,67 @@ plot_universe_age()
 ![Age of the Universe vs Redshift](assets/generated/universe_age.png)
 *Figure P1.12: Age of the universe as a function of redshift for flat cosmologies. Solid line represents the cosmology of Eq (1.73), dashed line are the results of the Planck 2018 cosmology [@planck2018].*
 
+
+<!-- ======================= -->
+<!-- PROBLEM 1.13            -->
+<!-- ======================= -->
+## Problem 1.13
+
+
+### a. Scale factor at matter-radiation equality
+Matter density scales as $\rho_m \propto a^{-3}$, while radiation density scales as $\rho_\gamma \propto a^{-4}$. The equality between matter and radiation densities occurs when
+
+$$
+\rho_m = \rho_\gamma \Rightarrow \Omega_{m0} a^{-3} = \Omega_{\gamma 0} a^{-4} \Rightarrow \Omega_{m0} a = \Omega_{\gamma 0}.
+$$
+
+This implies that the equality occurs at a scale factor
+
+$$
+1 + z_{\gamma m} = \frac{1}{a_{\gamma m}} = \frac{\Omega_{m0}}{\Omega_{\gamma 0}}
+= 1.18\times 10^4 h_7^2 \Omega_{m0}.
+$$
+
+
+### b. Age of the universe at matter-radiation equality
+
+Using the subsitution $u = \Omega_{\gamma 0} + a \Omega_{m 0}$ we can show that (For $\Omega_\Lambda = 0$)
+
+$$
+H_0t = \int_0^{\Omega_{\gamma 0}/\Omega_{m0}} da \frac{a}{\sqrt{\Omega_{m0} a + \Omega_{\gamma 0}}} =
+2(2 - 2^{1/2})\frac{\Omega_{\gamma 0}^{1/2}(1 - \Omega_{m0})}{3\Omega_{m0}^2}.
+$$
+
+Since $\Omega_{m0} + \Omega_{\gamma 0} = 1$, we have that the age of the universe at matter-radiation equality is
+
+$$
+t_{\gamma m} = \frac{2(2 - 2^{1/2})}{3H_0}\frac{\Omega_{\gamma 0}^{3/2}}{\Omega_{m0}^2}.
+$$
+
+### c. Comoving horizon at matter-radiation equality
+
+The comoving horizon at matter-radiation equality is given by
+
+$$
+x_{\gamma m} = c\int_0^{t_{\gamma m}} \frac{dt}{a(t)} = c\int_0^{a_{\gamma m}} \frac{da}{a^2 H(a)}
+= c\int_0^{a_{\gamma m}} \frac{da}{H_0\sqrt{\Omega_{m0} a + \Omega_{\gamma 0}}}.
+$$
+
+Similarly as before, using the substitution $u = \Omega_{\gamma 0} + a \Omega_{m 0}$ we can show that
+
+$$
+x_{\gamma m} = (2^{1/2} - 1)\frac{c}{H_0} \frac{\Omega_{\gamma 0}^{1/2}}{\Omega_{m0}}.
+$$
+
+<!-- ======================= -->
+<!-- PROBLEM 1.14            -->
+<!-- ======================= -->
+## Problem 1.14
+The universe is not opaque for $z \lesssim 6$ even though it's reionized because the mean electron density is now extremely low due to cosmic expansion, so the Thomson scattering optical depth is tiny, and photons can propagate freely.
+
+<!-- ======================= -->
+<!-- REFERENCES.             -->
+<!-- ======================= -->
+
 ## References
 \bibliography
