@@ -373,6 +373,106 @@ $$
 <!-- ======================= -->
 ## Problem 1.8
 
+### a. Static universe
+
+Start from the acceleration equation (1.49)
+
+$$
+\frac{\ddot{a}}{a} = -\frac{4\pi G}{3}\left(\rho + \frac{3p}{c^2}\right).
+$$
+
+For a static universe $\ddot{a} = 0$, if $\rho_\gamma = 0$, then this equation implies that
+
+$$
+\begin{align}
+0 &= -\frac{4\pi G}{3}\left((\rho_m + \rho_\Lambda) + \frac{3p}{c^2}(p_m + p_\Lambda)\right) \\
+&= -\frac{4\pi G}{3}\left(\rho_m + \rho_\Lambda + \frac{3}{c^2}(0 -\rho_\Lambda c^2)\right) \\
+&= -\frac{4\pi G}{3}\left(\rho_m + \rho_\Lambda - 3\rho_\Lambda\right) \\
+\end{align}
+$$
+
+which means that
+
+$$
+\rho_m = 2\rho_\Lambda.
+$$
+
+### b. Unstable universe
+
+Consider the perturbation $a(t) = a_0 + \delta a_1(t) = a_0[1 + \epsilon x(t)]$ around the static solution $a_0$, with $x(t) \equiv a_1(t) / a_0$ and $\epsilon \ll 1$. Each component of the density evolves as
+
+| Component | Density evolution | Perturbation |
+|-----------|-------------------|--------------|
+| Matter    | $\rho_m(t) = \rho_{m0}\left(\frac{a(t)}{a_0}\right)^{-3} \approx \rho_{m0}(1 - 3\epsilon x(t))$ | $\delta \rho_m(t) \approx -3\epsilon \rho_{m0} x(t)$ |
+| Dark energy | $\rho_\Lambda(t) = \rho_{\Lambda 0}$ | $\delta \rho_\Lambda(t) = 0$ |
+
+The perturbed acceleration equation becomes
+
+$$
+\begin{align}
+\delta(\ddot{a}/a) &= -\frac{4\pi G}{3}\left(\delta \rho_m + \delta \rho_\Lambda + \frac{3}{c^2}(\delta p_m + \delta p_\Lambda)\right) \\
+&= -\frac{4\pi G}{3}(-3\epsilon \rho_{m0} x(t)) = 4\pi G \epsilon \rho_{m0} x(t)\\
+\epsilon \ddot{x} &= 4\pi G \epsilon \rho_{m0} x(t).
+\end{align}
+$$
+
+Whose solution is
+
+$$
+x(t) = A e^{\sqrt{4\pi G \rho_{m0}}t} + B e^{-\sqrt{4\pi G \rho_{m0}}t}.
+$$
+
+where $A$ and $B$ are constants determined by the initial conditions.
+The perturbation grows exponentially with time, with characteristic timescale
+
+$$
+t_{\textrm{inst}} = \frac{1}{\sqrt{4\pi G \rho_{m0}}}.
+$$
+
+
+<!-- ======================= -->
+<!-- PROBLEM 1.9            -->
+<!-- ======================= -->
+## Problem 1.9
+
+For a flat universe,
+
+$$
+H^2 = \frac{\dot{a}^2}{a^2} = \frac{8\pi G}{3}\left( \rho_{m0}a^{-3} + \rho_{\Lambda 0}\right) =
+H_0^2\left(\Omega_{m0}a^{-3} + \Omega_{\Lambda 0}\right).
+$$
+
+In the distant future, $a\gg 1$, the matter term becomes negligible and we have
+
+$$
+H_\infty^2 \approx H_0^2 \Omega_{\Lambda 0} < H_0^2.
+$$
+
+The timescale for the expansion is then $a(t)\approx e^{H_\infty t}$, which is accelerated expansion since $\ddot{a} = H_\infty^2 e^{H_\infty t} > 0$.
+
+<!-- ======================= -->
+<!-- PROBLEM 1.10            -->
+<!-- ======================= -->
+## Problem 1.10
+
+The mean free path has the form
+
+$$
+\ell = \frac{1}{n\pi r^2} = \frac{4r \rho_{\rm int}}{3\Omega_a \rho_c},
+$$
+
+where $\rho_{\rm int}$ is the internal density of the asteroids, $\rho_c$ is the critical density of the universe, and $\Omega_a$ is the cosmological density parameter of asteroids. Requiring that the Universe is optically thin to distance quasars over a Hubble distance $D \sim c / H_0$ gives
+
+$$
+\tau \sim \frac{D}{\ell} \lesssim 1 \implies r \gtrsim \frac{3\Omega_a \rho_c}{4\rho_{\rm int}} \frac{c}{H_0}.
+$$
+
+Using $\rho_c = 1.88\times 10^{-29} h^2 \, \mathrm{g \, cm^{-3}}$, $c / H_0 \simeq 9.26\times 10^{27} h^{-1} \, \mathrm{cm}$, $\Omega_a = 0.1$ and $\rho_{\rm int} = 8 \, \mathrm{g \, cm^{-3}}$, we find
+
+$$
+r_{\min} \approx 1~\mu\mathrm{m}.
+$$
+
 <!-- ======================= -->
 <!-- PROBLEM 1.11            -->
 <!-- ======================= -->
