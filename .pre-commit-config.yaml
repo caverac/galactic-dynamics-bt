@@ -18,16 +18,15 @@ repos:
           - flake8-docstrings
           - flake8-import-order
 
-  # Pylint - Code analysis
-  - repo: https://github.com/pycqa/pylint
-    rev: v4.0.0
+  # Pylint - Code analysis (local hook for package imports)
+  - repo: local
     hooks:
       - id: pylint
-        additional_dependencies:
-          - numpy
-          - scipy
-          - matplotlib
-          - dacite
+        name: pylint
+        entry: uv run pylint
+        language: system
+        types: [python]
+        require_serial: false
 
   # pydocstyle - Docstring style checker
   - repo: https://github.com/pycqa/pydocstyle

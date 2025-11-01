@@ -4,6 +4,7 @@ import os
 
 from galactic_dynamics_bt.chapter01.frw_model import plot_frw_models
 from galactic_dynamics_bt.chapter01.sersic_profile import plot_sersic_profile
+from galactic_dynamics_bt.chapter01.universe_age import plot_universe_age
 
 if __name__ == "__main__":
 
@@ -11,3 +12,4 @@ if __name__ == "__main__":
 
     plot_frw_models()
     plot_sersic_profile()
+    plot_universe_age()
