@@ -61,7 +61,9 @@ markdown_extensions:
 
 nav:
   - Home: index.md
-  - Chapter 1: chapter01.md
+  - Chapter 1| Introduction:
+      - Problems 1-10: chapter01.1.md
+      - Problems 11-14: chapter01.2.md
 
 extra_javascript:
   - javascripts/mathjax.js
