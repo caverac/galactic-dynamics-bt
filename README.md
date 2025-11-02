@@ -14,7 +14,7 @@ This project provides detailed solutions to problems from the seminal textbook *
 - **Analytical derivations** with step-by-step mathematical explanations
 - **Numerical implementations** using modern Python scientific computing stack
 - **Visualizations** with publication-quality plots
-- **Interactive documentation** with mathematical formulas and figures
+- **Interactive documentation** with mathematical formulas and figures (**[https://caverac.github.io/galactic-dynamics-bt/](https://caverac.github.io/galactic-dynamics-bt/)**)
 
 ## 🚀 Quick Start
 
@@ -77,17 +77,17 @@ Then open [http://localhost:8000](http://localhost:8000) in your browser.
 galactic-dynamics-bt/
 ├── docs/                          # Documentation source
 │   ├── assets/                    # Generated figures and images
-│   ├── chapter01.md              # Chapter 1 solutions
-│   └── index.md                  # Homepage
-├── src/                          # Source code
-│   └── chapter01/               # Chapter 1 implementations
-│       └── frw_model.py         # FRW cosmological models
-├── tests/                       # Test suite
-│   └── unit/                   # Unit tests
-├── scripts/                    # Utility scripts
-├── main.py                    # MkDocs macro definitions
-├── pyproject.toml            # Project configuration
-└── mkdocs.yml               # Documentation configuration
+│   ├── chapterX.md                # Chapter X solutions
+│   └── index.md                   # Homepage
+├── galactic-dynamics-bt/          # Source code
+│   └── chapterX/                  # Chapter X implementations
+│       └── y.py                   # Implementation for problem y
+├── tests/                         # Test suite
+│   └── unit/                      # Unit tests
+├── scripts/                       # Utility scripts
+├── main.py                        # MkDocs macro definitions
+├── pyproject.toml                 # Project configuration
+└── mkdocs.yml                     # Documentation configuration
 ```
 
 ## 🔬 Implemented Solutions
@@ -154,9 +154,15 @@ This project is licensed under the MIT License - see the [LICENSE.md](LICENSE.md
 
 ## 🎯 Roadmap
 
-- [ ] Complete Chapter 1 solutions
-- [ ] Add Chapter 2: Potential Theory
-- [ ] Add Chapter 3: The Orbits of Stars
+- [x] Solutions for Chapter 1: Introduction
+- [ ] Solutions for Chapter 2: Potential Theory
+- [ ] Solutions for Chapter 3: The Orbits of Stars
+- [ ] Solutions for Chapter 4: Equilibria of Collisionless Systems
+- [ ] Solutions for Chapter 5: Stability of Collisionless Systems
+- [ ] Solutions for Chapter 6: Disk Dynamics and Spiral Structure
+- [ ] Solutions for Chapter 7: Kinetic Theory
+- [ ] Solutions for Chapter 8: Collisions and Encounters of Stellar Systems
+- [ ] Solutions for Chapter 9: Galaxy Formation
 - [ ] Interactive Jupyter notebooks
 - [ ] 3D visualizations for orbital mechanics
 - [ ] Animation support for time-dependent solutions

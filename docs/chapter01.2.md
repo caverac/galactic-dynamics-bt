@@ -89,15 +89,12 @@ The age of the universe at redshift $z$ can be computed as
 >>> from galactic_dynamics_bt.chapter01.universe_age import find_universe_age
 >>> z = 0
 >>> h7 = 1.05
->>> print(
-...     z,
-...     find_universe_age(
-...         z,
-...        omega_m0=0.237,
-...        omega_lambda0=0.763,
-...        omega_gamma0=8.84e-5 / h7**2,
-...        H0=70.0 * h7,
-...    ),
+>>> find_universe_age(
+...    z,
+...    omega_m0=0.237,
+...    omega_lambda0=0.763,
+...    omega_gamma0=8.84e-5 / h7**2,
+...    H0=70.0 * h7,
 ...)
 14.26742...
 ```
