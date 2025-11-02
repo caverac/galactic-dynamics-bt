@@ -1,6 +1,7 @@
 """Generate asset files for documentation and testing."""
 
 import os
+from pathlib import Path
 
 from galactic_dynamics_bt.chapter01.frw_model import plot_frw_models
 from galactic_dynamics_bt.chapter01.sersic_profile import plot_sersic_profile
@@ -8,8 +9,9 @@ from galactic_dynamics_bt.chapter01.universe_age import plot_universe_age
 
 if __name__ == "__main__":
 
-    os.makedirs("docs/assets/generated", exist_ok=True)
+    path = Path("docs", "assets", "generated")
+    os.makedirs(path, exist_ok=True)
 
-    plot_frw_models()
-    plot_sersic_profile()
-    plot_universe_age()
+    plot_frw_models(path / "frw_models.png")
+    plot_sersic_profile(path / "sersic_profile.png")
+    plot_universe_age(path / "universe_age.png")

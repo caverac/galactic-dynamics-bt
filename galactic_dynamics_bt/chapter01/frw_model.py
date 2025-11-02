@@ -1,6 +1,7 @@
 """Oppenheimer-Volkoff equations for spherical equilibrium."""
 
 import logging
+from pathlib import Path
 
 from matplotlib import pyplot as plt
 from matplotlib.axes import Axes
@@ -11,8 +12,15 @@ import numpy as np
 logger = logging.getLogger(__name__)
 
 
-def plot_frw_models() -> None:
-    """Plot the FRW model parameter space."""
+def plot_frw_models(path: Path | None = None) -> None:
+    """
+    Plot the FRW model parameter space.
+
+    Parameters
+    ----------
+    path : Path | None, optional
+        Path to save the figure, by default None. If None, the plot is shown instead.
+    """
     fig: Figure
     axs: Axes
     fig, axs = plt.subplots(
@@ -77,10 +85,13 @@ def plot_frw_models() -> None:
     axs.fill_between(x, y.max() * np.ones_like(x), y, hatch=r"\\\\", edgecolor="black", facecolor="none")
     axs.text(0.3, 1.5, "bounce", ha="center", va="center", rotation=60, transform_rotates_text=True)
 
-    fig.savefig(
-        "docs/assets/generated/frw_model.png",
-        dpi=150,
-        bbox_inches="tight",
-        facecolor="white",
-        edgecolor="none",
-    )
+    if path:
+        fig.savefig(
+            path,
+            dpi=150,
+            bbox_inches="tight",
+            facecolor="white",
+            edgecolor="none",
+        )
+    else:
+        plt.show()

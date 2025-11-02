@@ -1,5 +1,6 @@
 """Unit tests for Sersic profile functionality."""
 
+from pathlib import Path
 from unittest.mock import MagicMock, patch
 
 import numpy as np
@@ -70,11 +71,13 @@ class TestSersicProfile:
     @patch("matplotlib.pyplot.subplots")
     def test_plot_sersic_profile_creates_figure(self, mock_subplots: MagicMock) -> None:
         """Test that plot_sersic_profile creates a matplotlib figure."""
+
         mock_fig = MagicMock()
         mock_ax = MagicMock()
         mock_subplots.return_value = (mock_fig, mock_ax)
 
-        plot_sersic_profile()
+        output_path = Path("docs/assets/generated/sersic_profile.png")
+        plot_sersic_profile(output_path)
 
         # Verify figure creation
         mock_subplots.assert_called_once()
@@ -90,12 +93,26 @@ class TestSersicProfile:
 
         # Verify figure saving
         mock_fig.savefig.assert_called_once_with(
-            "docs/assets/generated/sersic_profile.png",
+            output_path,
             dpi=150,
             bbox_inches="tight",
             facecolor="white",
             edgecolor="none",
         )
+
+    @patch("matplotlib.pyplot.subplots")
+    def test_plot_sersic_profile_shows_figure(self, mock_subplots: MagicMock) -> None:
+        """Test that plot_sersic_profile shows figure when no path is provided."""
+        with patch("galactic_dynamics_bt.chapter01.sersic_profile.plt.show") as mock_show:
+            mock_fig = MagicMock()
+            mock_ax = MagicMock()
+            mock_subplots.return_value = (mock_fig, mock_ax)
+
+            plot_sersic_profile()
+
+            # Verify show was called and savefig was not called
+            mock_show.assert_called_once()
+            mock_fig.savefig.assert_not_called()
 
     def test_sersic_profile_mathematical_consistency(self) -> None:
         """Test mathematical consistency of the profile."""

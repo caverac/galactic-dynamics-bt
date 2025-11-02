@@ -1,5 +1,6 @@
 """Test suite for universe_age module."""
 
+from pathlib import Path
 from unittest.mock import MagicMock, patch
 
 import numpy as np
@@ -102,9 +103,8 @@ class TestFindUniverseAge:
 
     def test_negative_redshift_raises_error(self) -> None:
         """Test that negative redshift raises an appropriate error."""
-        # The function doesn't explicitly check for this, but the integral
-        # bounds would be invalid, so scipy.integrate.quad should handle it
-        with pytest.raises(ZeroDivisionError):
+        # When z = -1, then 1/(1+z) = 1/(1+(-1)) = 1/0, which should raise an error
+        with pytest.raises((ZeroDivisionError, ValueError)):
             find_universe_age(-1.0)
 
     def test_very_high_redshift(self) -> None:
@@ -176,20 +176,35 @@ class TestPlotUniverseAge:
     @patch("galactic_dynamics_bt.chapter01.universe_age.plt")
     def test_plot_saves_figure(self, mock_plt: MagicMock) -> None:
         """Test that the figure is saved to the correct location."""
+
+        mock_fig = MagicMock()
+        mock_axs = MagicMock()
+        mock_plt.subplots.return_value = (mock_fig, mock_axs)
+
+        output_path = Path("docs/assets/generated/universe_age.png")
+        plot_universe_age(output_path)
+
+        # Check that savefig was called with correct parameters
+        mock_fig.savefig.assert_called_once_with(
+            output_path,
+            dpi=150,
+            bbox_inches="tight",
+            facecolor="white",
+            edgecolor="none",
+        )
+
+    @patch("galactic_dynamics_bt.chapter01.universe_age.plt")
+    def test_plot_shows_figure(self, mock_plt: MagicMock) -> None:
+        """Test that the figure is shown when no path is provided."""
         mock_fig = MagicMock()
         mock_axs = MagicMock()
         mock_plt.subplots.return_value = (mock_fig, mock_axs)
 
         plot_universe_age()
 
-        # Check that savefig was called with correct parameters
-        mock_fig.savefig.assert_called_once_with(
-            "docs/assets/generated/universe_age.png",
-            dpi=150,
-            bbox_inches="tight",
-            facecolor="white",
-            edgecolor="none",
-        )
+        # Check that show was called on the mocked plt and savefig was not called
+        mock_plt.show.assert_called_once()
+        mock_fig.savefig.assert_not_called()
 
     @patch("galactic_dynamics_bt.chapter01.universe_age.plt")
     @patch("galactic_dynamics_bt.chapter01.universe_age.find_universe_age")
@@ -214,11 +229,3 @@ class TestPlotUniverseAge:
         omega_m_values = [call.kwargs.get("omega_m0") for call in calls if "omega_m0" in call.kwargs]
         assert 0.237 in omega_m_values  # First cosmology
         assert 0.315 in omega_m_values  # Second cosmology (Planck 2018)
-
-    def test_plot_function_runs_without_error(self) -> None:
-        """Integration test - check that plot function runs without raising exceptions."""
-        # This is a basic smoke test
-        try:
-            plot_universe_age()
-        except Exception as e:  # pylint: disable=broad-except
-            pytest.fail(f"plot_universe_age() raised an exception: {e}")

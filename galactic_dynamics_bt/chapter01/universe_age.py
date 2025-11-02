@@ -1,5 +1,7 @@
 """Universe age calculations for FRW cosmological models."""
 
+from pathlib import Path
+
 from matplotlib import pyplot as plt
 from matplotlib.axes import Axes
 from matplotlib.figure import Figure
@@ -43,8 +45,15 @@ def find_universe_age(
     return float(age * 1.02e3 / H0)
 
 
-def plot_universe_age() -> None:
-    """Plot contours of constant universe age in the Omega_m0 - Omega_lambda0 plane."""
+def plot_universe_age(path: Path | None = None) -> None:
+    """
+    Plot the age of the universe as a function of redshift.
+
+    Parameters
+    ----------
+    path : Path | None, optional
+        Path to save the figure, by default None. If None, the plot is shown instead.
+    """
     fig: Figure
     axs: Axes
     fig, axs = plt.subplots(
@@ -107,10 +116,13 @@ def plot_universe_age() -> None:
 
     axs.legend(loc="lower right", frameon=False)
 
-    fig.savefig(
-        "docs/assets/generated/universe_age.png",
-        dpi=150,
-        bbox_inches="tight",
-        facecolor="white",
-        edgecolor="none",
-    )
+    if path:
+        fig.savefig(
+            path,
+            dpi=150,
+            bbox_inches="tight",
+            facecolor="white",
+            edgecolor="none",
+        )
+    else:
+        plt.show()

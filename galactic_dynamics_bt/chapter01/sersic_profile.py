@@ -1,5 +1,7 @@
 """Sersic profile implementation and plotting for galaxy surface brightness distributions."""
 
+from pathlib import Path
+
 from matplotlib import pyplot as plt
 from matplotlib.axes import Axes
 from matplotlib.figure import Figure
@@ -117,7 +119,7 @@ def get_luminosity_sersic(r: float, /, *, m: float = 4, Ie: float = 1, Re: float
     return float(-q / np.pi)
 
 
-def plot_sersic_profile() -> None:
+def plot_sersic_profile(path: Path | None = None) -> None:
     """
     Plot the luminosity density profiles for different Sérsic indices.
 
@@ -126,7 +128,10 @@ def plot_sersic_profile() -> None:
     The plot illustrates how the concentration of the profile changes with
     the Sérsic index parameter.
 
-    The plot is saved to 'docs/assets/generated/sersic_profile.png'.
+    Parameters
+    ----------
+    path : Path | None, optional
+        Path to save the figure, by default None. If None, the plot is shown instead.
 
     Notes
     -----
@@ -182,10 +187,13 @@ def plot_sersic_profile() -> None:
 
     axs.legend(loc="lower left", frameon=False)
 
-    fig.savefig(
-        "docs/assets/generated/sersic_profile.png",
-        dpi=150,
-        bbox_inches="tight",
-        facecolor="white",
-        edgecolor="none",
-    )
+    if path:
+        fig.savefig(
+            path,
+            dpi=150,
+            bbox_inches="tight",
+            facecolor="white",
+            edgecolor="none",
+        )
+    else:
+        plt.show()

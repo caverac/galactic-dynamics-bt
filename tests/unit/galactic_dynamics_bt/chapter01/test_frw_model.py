@@ -1,5 +1,6 @@
 """Unit tests for FRW model plotting functionality."""
 
+from pathlib import Path
 from unittest.mock import MagicMock, patch
 
 from matplotlib.axes import Axes
@@ -108,22 +109,39 @@ class TestFRWModel:
                 assert call.kwargs["direction"] == "in"
 
     def test_plot_frw_models_saves_figure(self) -> None:
-        """Test that the figure is saved to the correct location."""
+        """Test that the figure is saved to the correct location when path is provided."""
         with patch("matplotlib.pyplot.subplots") as mock_subplots:
+            mock_fig = MagicMock(spec=Figure)
+            mock_ax = self._create_mock_axes()
+            mock_subplots.return_value = (mock_fig, mock_ax)
+
+            output_path = Path("docs/assets/generated/frw_model.png")
+            plot_frw_models(output_path)
+
+            # Verify savefig was called with correct parameters
+            mock_fig.savefig.assert_called_once_with(
+                output_path,
+                dpi=150,
+                bbox_inches="tight",
+                facecolor="white",
+                edgecolor="none",
+            )
+
+    def test_plot_frw_models_shows_figure(self) -> None:
+        """Test that the figure is shown when no path is provided."""
+        with (
+            patch("matplotlib.pyplot.subplots") as mock_subplots,
+            patch("galactic_dynamics_bt.chapter01.frw_model.plt.show") as mock_show,
+        ):
             mock_fig = MagicMock(spec=Figure)
             mock_ax = self._create_mock_axes()
             mock_subplots.return_value = (mock_fig, mock_ax)
 
             plot_frw_models()
 
-            # Verify savefig was called with correct parameters
-            mock_fig.savefig.assert_called_once_with(
-                "docs/assets/generated/frw_model.png",
-                dpi=150,
-                bbox_inches="tight",
-                facecolor="white",
-                edgecolor="none",
-            )
+            # Verify show was called and savefig was not called
+            mock_show.assert_called_once()
+            mock_fig.savefig.assert_not_called()
 
     def test_plot_data_arrays(self) -> None:
         """Test that the plotted data arrays have correct properties."""
