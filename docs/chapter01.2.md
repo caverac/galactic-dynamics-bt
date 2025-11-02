@@ -74,7 +74,7 @@ A plot of the different regions in the $\Omega_{m0}$-$\Omega_{\Lambda 0}$ plane 
 >>> plot_frw_model()
 ```
 
-![FRW Model Phase Diagram](assets/generated/frw_model.png)
+![FRW Model Phase Diagram](assets/generated/frw_models.png)
 
 *Figure P1.11: Phase diagram of FRW cosmological models in the $\Omega_{m0}$-$\Omega_{\Lambda 0}$ plane. The solid line indicates the boundary between bound and unbound models, while the dashed line indicates the boundary between decelerating and accelerating models.*
 
