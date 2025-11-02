@@ -110,8 +110,8 @@ For different redshifts we have
 The next figure shows the age of the universe as a function of redshift.
 
 ```python
-from galactic_dynamics_bt.chapter01.universe_age import plot_universe_age
-plot_universe_age()
+>>> from galactic_dynamics_bt.chapter01.universe_age import plot_universe_age
+>>> plot_universe_age()
 ```
 
 ![Age of the Universe vs Redshift](assets/generated/universe_age.png)

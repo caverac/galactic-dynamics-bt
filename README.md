@@ -46,7 +46,7 @@ This project provides detailed solutions to problems from the seminal textbook *
 Generate figures and run solutions:
 ```bash
 # Generate plots for Chapter 1
-uv run python src/chapter01/frw_model.py
+uv run python scripts/generate_assets.py
 
 # Run all tests
 uv run pytest

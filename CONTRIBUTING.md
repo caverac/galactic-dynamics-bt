@@ -63,19 +63,17 @@ We maintain high code quality standards:
 Run quality checks:
 ```bash
 # Format code
-uv run black src tests
+uv run black galactic_dynamics_bt tests
 
 # Check formatting
-uv run black --check src tests
+uv run black --check galactic_dynamics_bt tests
 
 # Lint code
-uv run flake8 src
+uv run flake8 galactic_dynamics_bt
 
 # Type checking
-uv run mypy src
+uv run mypy galactic_dynamics_bt
 
-# Sort imports
-uv run isort src tests
 ```
 
 #### Documentation Style
@@ -106,7 +104,7 @@ logger = logging.getLogger(__name__)
 
 def solve_problem_xy() -> tuple[np.ndarray, np.ndarray]:
     """Solve Problem X.Y analytically/numerically.
-    
+
     Returns:
         tuple: (x_values, y_values) for plotting
     """
@@ -120,11 +118,11 @@ def plot_problem_xy() -> None:
     plt.rcParams['font.family'] = 'serif'
     plt.rcParams['font.serif'] = ['Times New Roman', 'Times']
     plt.rcParams['mathtext.fontset'] = 'stix'
-    
+
     fig, ax = plt.subplots(figsize=(6.5, 5))
-    
+
     # Your plotting code here
-    
+
     # Save figure
     fig.savefig(
         f"docs/assets/chapter{X}_problem{Y}.png",
@@ -181,16 +179,16 @@ from chapter0X.problem_xy import solve_problem_xy
 
 class TestProblemXY:
     """Test cases for Problem X.Y."""
-    
+
     def test_solution_properties(self):
         """Test that solution has expected properties."""
         x, y = solve_problem_xy()
-        
+
         # Test array properties
         assert len(x) == len(y)
         assert np.all(np.isfinite(x))
         assert np.all(np.isfinite(y))
-        
+
     def test_physical_constraints(self):
         """Test that solution satisfies physical constraints."""
         # Add specific physics tests
