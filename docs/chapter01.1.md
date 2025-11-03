@@ -51,11 +51,11 @@ $$
 Plugging in numbers
 
 $$
-\delta\varpi \approx -9.279 \times 10^{-10} \frac{\rmarcsec}{\rmyr} \left(\frac{\rho}{\Msun/\rmpc^3}\right)\left(\frac{a}{\rmAU}\right)^{3/2},
+\delta\varpi \approx -9.279 \times 10^{-10} \frac{\mathrm{arcsec}}{\mathrm{yr}} \left(\frac{\rho}{\mathrm{M}_\odot/\mathrm{pc}^3}\right)\left(\frac{a}{\mathrm{AU}}\right)^{3/2},
 $$
 
 !!! warning "Potential error"
-    For Neptune, and $\rho = 0.1 \Msun/\rmpc^3$, we get $\delta\varpi = -1.5\times 10^{-8}\rmarcsec/\rmyr$ this differs from the value given in [@binneytremaine2008] by six orders of magnitude; unfortunately I cannot come up with a better derivation that can explain the discrepancy.
+    For Neptune, and $\rho = 0.1 \mathrm{M}_\odot/\mathrm{pc}^3$, we get $\delta\varpi = -1.5\times 10^{-8}\mathrm{arcsec}/\mathrm{yr}$ this differs from the value given in [@binneytremaine2008] by six orders of magnitude; unfortunately I cannot come up with a better derivation that can explain the discrepancy.
 
 <!-- ======================= -->
 <!-- PROBLEM 1.2             -->
@@ -308,7 +308,7 @@ That is $L \propto d_L^2 \propto H_0^{-2} \propto h_7^{-2}$, hence $\Upsilon_R \
 Assuming
 
 $$
-H_0 = 558 \rmkm/\rms^{-1}\rmMpc^{-1} = 70(7.97) \rmkm/\rms^{-1}\rmMpc^{-1}
+H_0 = 558 \mathrm{km}/\mathrm{s}^{-1}\mathrm{Mpc}^{-1} = 70(7.97) \mathrm{km}/\mathrm{s}^{-1}\mathrm{Mpc}^{-1}
 $$
 
 Since $\Gamma \propto h_7^2$, his estimated mass-to-light ratio should be corrected by a factor or $7.97^{-2}$, that is, his corrected estimadated value for the mass-to-light ratio is $~6$.
