@@ -77,6 +77,8 @@ disable = [
     "unnecessary-ellipsis",
     "too-many-public-methods",
     "duplicate-code",
+    "too-many-arguments",
+    "too-many-instance-attributes",
 ]
 
 [tool.pylint.IMPORTS]

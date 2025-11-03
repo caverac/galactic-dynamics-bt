@@ -64,6 +64,8 @@ nav:
   - Chapter 1| Introduction:
       - Problems 1-10: chapter01.1.md
       - Problems 11-14: chapter01.2.md
+  - Chapter 2| Potential Theory:
+      - Multipole Expansion: chapter02-multipole.md
 
 extra_javascript:
   - javascripts/mathjax.js
