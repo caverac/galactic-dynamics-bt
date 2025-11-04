@@ -28,11 +28,11 @@ In code this looks like this
 
 ```python
 >>> from galactic_dynamics_bt.chapter02.multipole_expansion import SatohModel, SatohModelParams
->>> model = SatohModel(SatohModelParams(q=0.7))
+>>> model = SatohModel(SatohModelParams(q=0.6))
 >>> expansion = MultipoleExpansion(model, 6)
 ```
 
-This will create a multipole expansion up to $l_\mathrm{max} = 6$ for the Satoh model with flattening parameter $q=0.7$. You can then evaluate the potential at any point $(R, z)$ using
+This will create a multipole expansion up to $l_\mathrm{max} = 6$ for the Satoh model with flattening parameter $q = b/a = 0.6$. You can then evaluate the potential at any point $(R, z)$ using
 
 ```python
 >>> R, z = 1.0, 0.5
@@ -41,7 +41,7 @@ This will create a multipole expansion up to $l_\mathrm{max} = 6$ for the Satoh 
 
 ![Multipole Expansion of Satoh Model](assets/generated/multipole_expansion_satoh.png)
 
-*Figure: Multipole Expansion of Satoh Model, $b/a=0.7$. I included a flatter potential than the one in [@binneytremaine2008] to better illustrate the convergence of the expansion with $l_\mathrm{max}$. The solid black line shows the exact potential, other lines show the multipole expansion with different $l_\mathrm{max}$ values. $l_\mathrm{max} = 10$ is practically indistinguishable from the exact potential.*
+*Figure: Multipole Expansion of Satoh Model, $b/a=0.6$. I included a flatter potential than the one in [@binneytremaine2008] to better illustrate the convergence of the expansion with $l_\mathrm{max}$. The solid black line shows the exact potential, other lines show the multipole expansion with different $l_\mathrm{max}$ values. $l_\mathrm{max} = 10$ is practically indistinguishable from the exact potential.*
 
 <!-- ======================= -->
 <!-- REFERENCES.             -->
