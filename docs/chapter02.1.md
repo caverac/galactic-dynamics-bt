@@ -76,10 +76,133 @@ which can be integrated twice to obtain the same result as before.
 <!-- ======================= -->
 ## Problem 2.4
 
+### a. Laplace's equation
+
+For $\Phi = \ln[r(1 + |\cos\theta|)]$ we have
+
+1. The potential is not defined at $r=0$.
+2. At $\theta = \pi/2$ the potential is continuous but not differentiable.
+
+At any other location all derivatives are smooth and well defined
+
+$$
+\begin{align}
+\nabla^2 \Phi &= \frac{1}{r^2}\frac{\partial}{\partial r}\left(r^2 \frac{\partial \Phi}{\partial r}\right) + \frac{1}{r^2 \sin\theta}\frac{\partial}{\partial \theta}\left(\sin\theta \frac{\partial \Phi}{\partial \theta}\right) \\
+&= \frac{1}{r^2} + \frac{1}{r^2\sin\theta}\frac{d}{d\theta}\left(\sin\theta \frac{d}{d\theta}(\ln(1 + |\cos\theta|))\right) \\
+\end{align}
+$$
+
+If $0 < \theta < \pi/2$
+
+$$
+\nabla^2 \Phi = \frac{1}{r^2} + \frac{1}{r^2\sin\theta}\frac{d}{d\theta}\left(\sin\theta \frac{d}{d\theta}(\ln(1 + \cos\theta))\right) = \frac{1}{r^2} - \frac{1}{r^2} = 0,
+$$
+
+and if $\pi/2 < \theta < \pi$
+
+$$
+\nabla^2 \Phi = \frac{1}{r^2} + \frac{1}{r^2\sin\theta}\frac{d}{d\theta}\left(\sin\theta \frac{d}{d\theta}(\ln(1 - \cos\theta))\right) = \frac{1}{r^2} - \frac{1}{r^2} = 0.
+$$
+
+In both cases, the Laplacian vanishes. Thus, the density is zero everywhere except at $r=0$ and $\theta = \pi/2$. Because of the absolute value, we conclude that a potential of the form $\Phi(R, z) = v_c^2\ln(R + |z|) + \mathrm{const}$ introduces a $\delta$-function at $\theta = \pi/2$, that is $\rho(R, z) = \Sigma(R)\delta(z)$.
+
+### b. Disk density
+We can integrate Poisson's equation across a thin pillbox of thickness $2h$ around the plane $z=0$.
+
+$$
+\begin{align}
+\int_{-h}^{+h} dz \, \nabla^2 \Phi &= \left(\frac{\partial \Phi}{\partial z}\right)_{-h}^{h} = 4\pi G \Sigma(R) \\
+&= \frac{v_c^2}{R + h} - \left(-\frac{v_c^2}{R + h}\right) = \frac{2v_c^2}{R + h} \\
+&\to \frac{2v_c^2}{R} \quad\text{for } R \to \infty
+\end{align}
+$$
+
+That is
+
+$$
+\Sigma(R) = \frac{v_c^2}{2\pi G R}.
+$$
 
 <!-- ======================= -->
-<!-- REFERENCES.             -->
+<!-- PROBLEM 2.5             -->
 <!-- ======================= -->
+## Problem 2.5
+
+### a. Constant circular speed
+
+$$
+M(r) = 2\pi A \int_0^r dr' = 2\pi A r \quad\text{for } r < R_0,
+$$
+
+and $M(r > R_0) = M(R_0) = 2\pi A R_0$. The cicular speed is then
+
+$$
+v_c^2(r) = 2\pi AG \begin{cases}
+1 & r < R_0 \\
+R_0/r & r \geq R_0
+\end{cases}
+$$
+
+### b. Flattened model
+
+Consider now the density profile
+
+$$
+\rho(m^2) = \frac{A}{2m^2} \quad\text{with}\quad m^2 = R^2 + \frac{z^2}{q^2}.
+$$
+
+The circular velocity is
+
+$$
+\begin{align}
+v_c^2(R) &= 4\pi G \sqrt{1 - e^2}\int_0^R dm \, \frac{m^2\rho(m^2)}{\sqrt{R^2 - m^2 e^2}} \\
+&= 2\pi AG \sqrt{1 - e^2}\int_0^R dm \, \frac{1}{\sqrt{R^2 - m^2 e^2}} \\
+&= 2\pi AG q \frac{\arcsin e}{e}
+\end{align}
+$$
+
+Note that in the limit $q\to 1$ (i.e. $e\to 0$) we have that $\arcsin e / e \to 1$ and we recover the result from part (a).
+
+### c. Razor-thin limit
+
+At fixed $R < R_0$ the body model extends in $z$ only for $z < q\sqrt{R_0^2 - R^2}$, and the density in the limit $q\to 0$ becomes
+
+$$
+\begin{align}
+\Sigma(R) &= \lim_{q\to 0} \int_{-\infty}^{+\infty} dz \, \rho(m^2) = 2\int_{0}^{q\sqrt{R_0^2 - R^2}} dz \, \frac{A}{2(R^2 + z^2/q^2)} \\
+&= Aq \int_0^{\sqrt{R_0^2 - R^2}} \frac{du}{R^2 + u^2} = \frac{Aq}{R}\arctan\left(\frac{\sqrt{R_0^2 - R^2}}{R}\right) \\
+&= \frac{Aq}{R}\arccos\left(\frac{R}{R_0}\right).
+\end{align}
+$$
+
+<!-- ======================= -->
+<!-- PROBLEM 2.6             -->
+<!-- ======================= -->
+## Problem 2.6
+
+$$
+\begin{align}
+R^2 + (a + |z|)^2 &= a^2\sinh^2u \sin^2v + (a + a \cosh u |\cos v|)^2 \\
+&= a^2(\sinh^2u \sin^2v + 1 + 2\cosh u |\cos v| + \cosh^2u \cos^2v) \\
+&= a^2(\cosh^2u + \cos^2v + 2\cosh u |\cos v|) \\
+&= a^2(\cosh u + |\cos v|)^2
+\end{align}
+$$
+
+The Kuzmin potential is then
+
+$$
+\begin{align}
+\Phi_K &= -\frac{GM}{\sqrt{R^2 + (a + |z|)^2}} = -\frac{GM}{a(\cosh u + |\cos v|)} \\
+&= -\frac{GM}{a}\frac{1}{\cosh u + |\cos v|}\frac{\cosh u - |\cos v|}{\cosh u - |\cos v|} \\
+&= -\frac{GM}{a} \frac{\cosh u - |\cos v|}{\sinh^2u + \sin^2v}
+\end{align}
+$$
+
+<!-- ======================= -->
+<!-- PROBLEM 2.7             -->
+<!-- ======================= -->
+## Problem 2.7
 
 ## References
 \bibliography
