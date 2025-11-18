@@ -53,6 +53,9 @@ uv run pytest
 
 # Build documentation
 uv run mkdocs serve
+
+# Build documentation - live
+uv run mkdocs serve --livereload
 ```
 
 ## 📖 Documentation
