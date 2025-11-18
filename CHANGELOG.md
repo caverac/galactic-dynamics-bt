@@ -13,6 +13,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Testing infrastructure with pytest
 - Code quality tools (black, flake8, pylint, mypy)
 - MIT license and contribution guidelines
+## v0.7.0 (2025-11-18)
+
+### Feat
+
+- **chapter-02**: solved problems 21-24
+- **chapter-02**: solved problems 21-24
+- **chapter-02**: solved problems 23-24
+- **chapter-02**: solved problems 21-22
+
 ## v0.6.0 (2025-11-18)
 
 ### Feat
