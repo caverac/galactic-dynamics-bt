@@ -272,7 +272,7 @@ $$
 <!-- ======================= -->
 <!-- PROBLEM 2.19            -->
 <!-- ======================= -->
-## Problem 2.19
+## Problem 2.19 🌶️
 
 Solutions in spherical coordinates are
 
