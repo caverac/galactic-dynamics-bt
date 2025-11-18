@@ -274,6 +274,81 @@ $$
 <!-- ======================= -->
 ## Problem 2.19
 
+Solutions in spherical coordinates are
+
+$$
+\Phi_{lm}(r, \theta, \phi) = \frac{B_{lm}}{r^{l + 1}} Y_l^m(\theta, \phi) = \frac{B_{lm}N_{lm}}{r^{l + 1}} P_l^m(\cos\theta) e^{im\phi},
+$$
+
+for some constant $B_{lm}$, and $\Phi_{lm}$ goes to zero as $r \to \infty$. At the $z=0$ plane, we have
+
+$$
+\begin{align}
+4\pi G \Sigma_{lm}(r, \phi) &= 2 (\hat{e}_z \cdot \nabla \Phi_{lm})|_{\theta = \pi/2} = 2 \frac{1}{r} \frac{\partial \Phi_{lm}}{\partial \theta}\bigg|_{\theta = \pi/2} \\
+&= - \frac{2B_{lm}}{r^{l + 2}} \frac{\partial Y_l^m}{\partial \theta}\bigg|_{\theta = \pi/2} \\
+&= -\frac{2B_{lm}}{r^{l + 2}} N_{lm} e^{im\phi} \frac{dP_l^m(\cos\theta)}{d\theta}\bigg|_{\theta = \pi/2} \\
+&= \frac{2B_{lm}}{r^{l + 2}} N_{lm} e^{im\phi}P_{lm}(0) \left.\frac{d\ln P_l^m(x)}{dx}\right|_{x=0}.
+\end{align}
+$$
+
+!!! warning "Incomplete solution"
+    I got stuck completing this problem. Left some notes here to come back later.
+
+<!-- ======================= -->
+<!-- PROBLEM 2.20            -->
+<!-- ======================= -->
+## Problem 2.20
+
+For a thin axismmetric disk $\rho(R, z) = \sigma(R)\delta(z)$ the potential is
+
+$$
+\begin{align}
+\Phi(R, 0) &= -G\int d^3\mathbf{x}' \frac{\rho(\mathbf{x}')}{|\mathbf{x} - \mathbf{x}'|}  \\
+&= -G\int_0^\infty dR' \, R'\Sigma(R') \int_0^{2\pi} d\phi' \, \frac{1}{(R^2 + R'^2 - 2RR'\cos\phi')^{1/2}}  \\
+&= -G\int_0^\infty dR' \, R'\Sigma(R') \int_0^{2\pi}d\phi'\, \sum_{l=0}^\infty\frac{R_<^l}{R_>^{l + 1}} P_l(\cos\phi') \\
+&= -G\sum_{l = 0}^\infty \int_0^\infty dR' \, R'\Sigma(R') \frac{R_<^l}{R_>^{l + 1}} \int_0^{2\pi} d\phi' \, P_l(\cos\phi').
+\end{align}
+$$
+
+The integral over $\phi'$ vanishes for odd $l$, and for even $l=2m$ we have
+
+$$
+\int_0^{2\pi} d\phi' \, P_{2l}(\cos\phi') = 2\int_0^\pi d\phi' \, P_{2l}(\cos\phi') = 2\pi \left[\frac{(2l)!}{2^{2l}(l!)^2}\right]^2 \equiv 2\alpha_{l}.
+$$
+
+Therefore,
+
+$$
+\begin{align}
+\Phi(R, 0) &= -2G \int_0^\infty dR' \, R'\Sigma(R') \sum_{l=0}^\infty \alpha_l \frac{R_<^{2l}}{R_>^{2l + 1}} \\
+&= -2G \sum_{l=0}^\infty \alpha_l \left[\frac{1}{R^{2l + 1}} \int_0^R dR' \, R'^{2l + 1} \Sigma(R') + R^{2l} \int_R^\infty dR' \, \frac{\Sigma(R')}{R'^{2l}}\right].
+\end{align}
+$$
+
+And the circular velocity is
+
+$$
+\begin{align}
+v_c^2(R) &= R \frac{d\Phi(R, 0)}{dR} \\
+&= -2G \sum_{l=0}^\infty \alpha_l \left[ -\frac{2l + 1}{R^{2l + 1}} \int_0^R dR' \, R'^{2l + 1} \Sigma(R')
++ \frac{R^{2l + 1}}{R^{2l + 1}}R\Sigma(R) \right. \\
+&\quad \left. + 2l R^{2l} \int_R^\infty dR' \, \frac{\Sigma(R')}{R'^{2l}} - \frac{R^{2l}}{R^{2l}R\Sigma(R)}\right] \\
+&= 2G \sum_{l=0}^\infty \alpha_l \left[ \frac{2l + 1}{R^{2l + 1}} \int_0^R dR' \, R'^{2l + 1} \Sigma(R') - 2l R^{2l} \int_R^\infty dR' \, \frac{\Sigma(R')}{R'^{2l}} \right].
+\end{align}
+$$
+
+Note that $\alpha_0 = \pi$, so isolating the monopole term gives
+
+$$
+\begin{align}
+v_c^2 &= \frac{2\pi G}{R} \int_0^R dR' \, R' \Sigma(R') + 2G \sum_{l=1}^\infty \alpha_l \left[ \frac{2l + 1}{R^{2l + 1}} \int_0^R dR' \, R'^{2l + 1} \Sigma(R') \right.\\
+& \qquad\left. - 2l R^{2l} \int_R^\infty dR' \, \frac{\Sigma(R')}{R'^{2l}} \right] \\
+&= \frac{GM(R)}{R} + 2G \sum_{l=0}^\infty \alpha_l \left[ \frac{2l + 1}{R^{2l + 1}} \int_0^R dR' \, R'^{2l + 1} \Sigma(R') \right.\\
+& \qquad\left. - 2l R^{2l} \int_R^\infty dR' \, \frac{\Sigma(R')}{R'^{2l}} \right].
+\end{align}
+$$
+
+
 
 ## References
 \bibliography
