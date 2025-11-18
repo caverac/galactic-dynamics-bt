@@ -132,6 +132,64 @@ $$
 \Sigma(x', y') = \frac{1}{4\pi^2 G} \iint dx\, dy \, \frac{1}{|\mathbf{R} - \mathbf{R}'|} \left( \frac{\partial^2\Phi}{\partial x^2} + \frac{\partial^2\Phi}{\partial y^2} \right).
 $$
 
+<!-- ======================= -->
+<!-- PROBLEM 2.23            -->
+<!-- ======================= -->
+## Problem 2.23
+
+With $\mathbf{r} = (l, m, n)$ and $\mathbf{k} = (k_x, k_y, k_z)$
+
+$$
+\begin{align}
+(\nabla^2 \Phi)_{\mathbf{r}} &= \sum_{\mathbf{k}} \frac{\hat{\Phi}_{\mathbf{k}}}{\Delta^2}\left(e^{2\pi i (k_x(l+1) + k_ym + k_zn)/K} + e^{2\pi i (k_x(l-1) + k_ym + k_zn)/K} \right.\\
+&\quad + \left.\cdots - 6e^{2\pi i (k_xl + k_ym + k_zn)/K}\right) \\
+&= \sum_{\mathbf{k}} \frac{\hat{\Phi}_{\mathbf{k}}}{\Delta^2}\left( e^{2\pi i k_x/K} e^{2\pi i \mathbf{k}\cdot\mathbf{r}/K} + e^{-2\pi i k_x/K} e^{2\pi i \mathbf{k}\cdot\mathbf{r}/K} \right. \\
+&\quad + \left. \cdots - 6e^{2\pi i \mathbf{k}\cdot\mathbf{r}/K} \right) \\
+&= \sum_{\mathbf{k}} \frac{\hat{\Phi}_{\mathbf{k}}}{\Delta^2} \left(2\cos(2\pi k_x/K) + 2\cos(2\pi k_y/K) + 2\cos(2\pi k_z/K) - 6 \right) e^{2\pi i \mathbf{k}\cdot\mathbf{r}/K} \\
+&= \sum_{\mathbf{k}} \frac{2\hat{\Phi}_{\mathbf{k}}}{\Delta^2} (\cos(2\pi k_x/K) + \cos(2\pi k_y/K) + \cos(2\pi k_z/K) - 3) e^{2\pi i \mathbf{k}\cdot\mathbf{r}/K} \\
+&= 4\pi G \rho_{\mathbf{r}} \\
+&= 4\pi G \sum_{\mathbf{k}} \hat{\rho}_{\mathbf{k}} e^{2\pi i \mathbf{k}\cdot\mathbf{r}/K}.
+\end{align}
+$$
+
+From which,
+
+$$
+\hat{\Phi}_{\mathbf{k}} = \frac{2\pi G \Delta^2}{\cos(2\pi k_x/K) + \cos(2\pi k_y/K) + \cos(2\pi k_z/K) - 3} \hat{\rho}_{\mathbf{k}}.
+$$
+
+<!-- ======================= -->
+<!-- PROBLEM 2.24            -->
+<!-- ======================= -->
+## Problem 2.24
+
+
+### a. Force on a shell
+The density for the system can be written as
+
+$$
+\rho(r) = \sum_{n=1}^N \frac{m_n}{4\pi r_n^2}\delta(r - r_n).
+$$
+
+The force at radius $r_{n - 1} < r < r_n$ is completely determined by the mass interior to $r$:
+
+$$
+\mathbf{F}(r) = -\frac{GM(r)}{r^2}\hat{e}_r = -\frac{G}{r^2}\left( \sum_{j=1}^{n - 1} m_j \right)\hat{e}_r = -\frac{GM_n}{r^2}\hat{e}_r.
+$$
+
+The for on the shell at $r_n$ is then
+
+$$
+\mathbf{F}_n = \frac{GM_n}{r_n^2}\hat{e}_r.
+$$
+
+### b. Computational complexity
+
+The enclosed mass $M_n$ can be computed in $\mathcal{O}(N)$ operations by precomputing the cumulative sum of the masses: $M_n = M_{n-1} + m_n$.
+
+After each $M_n$ is known, computing the force on each shell is $\mathcal{O}(1)$, so the total complexity for computing the forces on all shells is $\mathcal{O}(N)$.
+
+The total computational complexity is therefore $\mathcal{O}(N)$.
 
 ## References
 \bibliography
