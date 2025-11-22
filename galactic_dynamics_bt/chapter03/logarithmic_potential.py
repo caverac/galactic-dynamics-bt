@@ -443,7 +443,7 @@ class LogarithmicPotential(Model[LogarithmicPotentialParams]):
         Rmin = root_scalar(f, bracket=(0.01, 0.3), method="brentq").root
         Rmax = root_scalar(f, bracket=(0.3, 2.0), method="brentq").root
 
-        R = np.linspace(Rmin, Rmax, 500)
+        R = np.linspace(Rmin, Rmax, 500, endpoint=True)
         return R, np.sqrt(
             2 * (E - 0.5 * self.params.v0**2 * np.log(R**2) - 0.5 * (Lz**2) / (R**2)) * (self.params.q**2)
         )

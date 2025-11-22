@@ -39,7 +39,7 @@ which is displayed in *Figure 2*, in two different windows of time. As expected,
 
 *Figure: 1: Top panels: Orbits in the meridional plane $(R, z)$ for a flatten logarithmic potential with $q = 0.9$ (left) and $q = 0.6$ (right). Bottom panels: Corresponding Poincaré surfaces of section. The solid line indicates the zero-velocity curve, while the dashed line shows the orbit if the total angular momentum were exactly conserved.*
 
-### Poincaré Surface of Section
+## Poincaré Surface of Section
 
 To calculate the Poincaré surface of section, I record the coordinates along the orbit and look for the points where it crosses the plane $z = 0$: $z(t) < 0 < z(t + \Delta t)$ and $p_z(t) > 0$. The points are then subsequently integrated by changing the coordinates frp $(R(t), z(t), p_R(t), p_z(t))$ to $(R(z), t(z), p_R(z), p_z(z))$ [@Cvitanovic2020],
 

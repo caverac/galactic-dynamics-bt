@@ -158,7 +158,7 @@ This project is licensed under the MIT License - see the [LICENSE.md](LICENSE.md
 ## 🎯 Roadmap
 
 - [x] Solutions for Chapter 1: Introduction
-- [ ] Solutions for Chapter 2: Potential Theory
+- [x] Solutions for Chapter 2: Potential Theory
 - [ ] Solutions for Chapter 3: The Orbits of Stars
 - [ ] Solutions for Chapter 4: Equilibria of Collisionless Systems
 - [ ] Solutions for Chapter 5: Stability of Collisionless Systems
