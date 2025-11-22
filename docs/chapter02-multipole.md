@@ -6,7 +6,7 @@ $$
 \rho(r, \Omega) = \rho(R, z) = \rho(r\sin\theta, r\cos\theta),
 $$
 
-that is, it does not depend on the azimuthal angle $\phi$. For this case Eq. (2.94) of [@binneytremaine2008] reduces to
+that is, it does not depend on the azimuthal angle $\phi$. For this case Eq. (2.94) of [@BinneyTremaine2008] reduces to
 
 $$
 \rho_{lm}(a) = 2\pi \delta_{m0} \sqrt{\frac{2l + 1}{4\pi}} \int_{-1}^{1} du P_l(u) \rho(a\sqrt{1 - u^2}, au),
@@ -41,7 +41,7 @@ This will create a multipole expansion up to $l_\mathrm{max} = 6$ for the Satoh 
 
 ![Multipole Expansion of Satoh Model](assets/generated/multipole_expansion_satoh.png)
 
-*Figure: Multipole Expansion of Satoh Model, $b/a=0.6$. I included a flatter potential than the one in [@binneytremaine2008] to better illustrate the convergence of the expansion with $l_\mathrm{max}$. The solid black line shows the exact potential, other lines show the multipole expansion with different $l_\mathrm{max}$ values. $l_\mathrm{max} = 10$ is practically indistinguishable from the exact potential.*
+*Figure: Multipole Expansion of Satoh Model, $b/a=0.6$. I included a flatter potential than the one in [@BinneyTremaine2008] to better illustrate the convergence of the expansion with $l_\mathrm{max}$. The solid black line shows the exact potential, other lines show the multipole expansion with different $l_\mathrm{max}$ values. $l_\mathrm{max} = 10$ is practically indistinguishable from the exact potential.*
 
 <!-- ======================= -->
 <!-- REFERENCES.             -->

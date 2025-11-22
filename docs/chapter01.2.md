@@ -115,7 +115,7 @@ The next figure shows the age of the universe as a function of redshift.
 ```
 
 ![Age of the Universe vs Redshift](assets/generated/universe_age.png)
-*Figure P1.12: Age of the universe as a function of redshift for flat cosmologies. Solid line represents the cosmology of Eq (1.73), dashed line are the results of the Planck 2018 cosmology [@planck2018].*
+*Figure P1.12: Age of the universe as a function of redshift for flat cosmologies. Solid line represents the cosmology of Eq (1.73), dashed line are the results of the Planck 2018 cosmology [@Planck2018].*
 
 
 <!-- ======================= -->

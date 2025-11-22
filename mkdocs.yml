@@ -69,6 +69,8 @@ nav:
       - Problems 1-10: chapter02.1.md
       - Problems 11-20: chapter02.2.md
       - Problems 21-24: chapter02.3.md
+  - Chapter 3| The Orbits of Stars:
+      - Surfaces of section: chapter03-surfaces-of-section.md
 
 extra_javascript:
   - javascripts/mathjax.js

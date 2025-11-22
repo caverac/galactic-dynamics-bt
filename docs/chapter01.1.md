@@ -55,7 +55,7 @@ $$
 $$
 
 !!! warning "Potential error"
-    For Neptune, and $\rho = 0.1 \mathrm{M}_\odot/\mathrm{pc}^3$, we get $\delta\varpi = -1.5\times 10^{-8}\mathrm{arcsec}/\mathrm{yr}$ this differs from the value given in [@binneytremaine2008] by six orders of magnitude; unfortunately I cannot come up with a better derivation that can explain the discrepancy.
+    For Neptune, and $\rho = 0.1 \mathrm{M}_\odot/\mathrm{pc}^3$, we get $\delta\varpi = -1.5\times 10^{-8}\mathrm{arcsec}/\mathrm{yr}$ this differs from the value given in [@BinneyTremaine2008] by six orders of magnitude; unfortunately I cannot come up with a better derivation that can explain the discrepancy.
 
 <!-- ======================= -->
 <!-- PROBLEM 1.2             -->
