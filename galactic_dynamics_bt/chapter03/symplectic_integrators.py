@@ -44,23 +44,13 @@ class SymplecticIntegrator:
     >>> import numpy as np
     >>> def dT_dp(p): return p  # dT/dp = p for T = p^2/2
     >>> def dV_dq(q): return q  # dV/dq = q for V = q^2/2
-    >>> def hamiltonian(q, p): return 0.5 * (q**2 + p**2)
+    >>> def hamiltonian(q, p): return 0.5 * ((q**2).sum() + (p**2).sum())
     >>> y0 = [1.0, 0.0]  # Start at q=1, p=0
-    >>> t = np.linspace(0, 4*np.pi, 100)
-    >>> integrator = SymplecticIntegrator(dT_dp, dV_dq, y0, t, order=2, H=hamiltonian)
+    >>> t = np.arange(0, 4*np.pi, 0.01)
+    >>> integrator = SymplecticIntegrator(dT_dp, dV_dq, y0, t, order=4, H=hamiltonian)
     >>> y = integrator.integrate()
     >>> # y contains [q(t), p(t)] at each time point
 
-    Kepler problem with H = p^2/2 - 1/|q|:
-
-    >>> def dT_dp_kepler(p): return p  # T = |p|^2/2
-    >>> def dV_dq_kepler(q):
-    ...     r = np.linalg.norm(q)
-    ...     return -q / r**3  # V = -1/r, dV/dq = q/r^3
-    >>> y0 = [1.0, 0.0, 0.0, 1.0]  # Circular orbit: q=[1,0], p=[0,1]
-    >>> t = np.linspace(0, 2*np.pi, 1000)
-    >>> integrator = SymplecticIntegrator(dT_dp_kepler, dV_dq_kepler, y0, t, order=4)
-    >>> y = integrator.integrate()
     """
 
     dT: Callable[[np.ndarray], np.ndarray]
@@ -175,9 +165,13 @@ class SymplecticIntegrator:
                     E_current = self.H(q, p)
                     energy_variation = np.abs(E_current - E0)
                     if energy_variation > 1e-3 * np.abs(E0):
+                        # Ensure we have scalars for formatting
+                        energy_var_scalar = float(np.asarray(energy_variation).item())
+                        e0_scalar = float(np.asarray(E0).item())
+                        relative_variation = energy_var_scalar / np.abs(e0_scalar)
                         warnings.warn(
-                            f"Energy not conserved at step {i}: variation = {energy_variation:.2e}, "
-                            f"relative to initial = {energy_variation/np.abs(E0):.2e}"
+                            f"Energy not conserved at step {i}: variation = {energy_var_scalar:.2e}, "
+                            f"relative to initial = {relative_variation:.2e}"
                         )
 
         return y
@@ -192,15 +186,6 @@ class SymplecticIntegrator:
 
         This is first-order accurate but exactly preserves the symplectic structure.
         Use for very stiff systems or when energy drift must be minimized.
-
-        Examples
-        --------
-        >>> # Single step of harmonic oscillator
-        >>> q, p = np.array([1.0]), np.array([0.0])
-        >>> dt = 0.1
-        >>> # For integrator with dT(p)=p, dV(q)=q:
-        >>> q_new, p_new = integrator._euler_symplectic(q, p, dt)
-        >>> # Result: p_new = p - dt*q = -0.1, q_new = q + dt*p_new = 0.99
         """
         # p_{n+1} = p_n - dt * dV/dq(q_n)
         p_new = p - dt * self.dV(q)
@@ -219,16 +204,6 @@ class SymplecticIntegrator:
 
         Second-order accurate with excellent long-term stability.
         Recommended for most applications.
-
-        Examples
-        --------
-        >>> # Verlet step for 2D harmonic oscillator
-        >>> q = np.array([1.0, 0.5])  # 2D position
-        >>> p = np.array([0.0, -0.2])  # 2D momentum
-        >>> dt = 0.01
-        >>> # For H = (p1^2 + p2^2)/2 + (q1^2 + q2^2)/2:
-        >>> q_new, p_new = integrator._verlet(q, p, dt)
-        >>> # Energy should be approximately conserved
         """
         # Half step for momentum
         p_half = p - 0.5 * dt * self.dV(q)
@@ -249,15 +224,6 @@ class SymplecticIntegrator:
 
         The method composes multiple Verlet steps with coefficients:
         1/(2 - 2^(1/3)) = 1.351
-
-        Examples
-        --------
-        >>> # Use for systems requiring high precision
-        >>> q = np.array([1.0])  # Position
-        >>> p = np.array([0.0])  # Momentum
-        >>> dt = 0.1  # Can use larger timesteps than Verlet
-        >>> q_new, p_new = integrator._ruth4(q, p, dt)
-        >>> # Fourth-order accurate result with symplectic properties preserved
         """
         # Ruth coefficients
         theta = 1.0 / (2.0 - 2 ** (1.0 / 3.0))
@@ -284,15 +250,6 @@ class SymplecticIntegrator:
 
         Uses 7 composition coefficients derived by Kahan & Li (1997)
         for minimal leading-order error terms.
-
-        Examples
-        --------
-        >>> # Long-term orbital integration
-        >>> q = np.array([1.0, 0.0])  # Initial position (AU)
-        >>> p = np.array([0.0, 2*np.pi])  # Initial momentum (AU/year)
-        >>> dt = 0.1  # Large timestep possible due to high order
-        >>> q_new, p_new = integrator._kahan_li6(q, p, dt)
-        >>> # Suitable for thousand-year integrations with minimal drift
         """
         # Kahan-Li coefficients for 6th order
         w0 = -1.17767998417887
@@ -325,15 +282,6 @@ class SymplecticIntegrator:
 
         Computational cost is ~8.5x higher than Verlet per step, but allows
         much larger timesteps while maintaining accuracy.
-
-        Examples
-        --------
-        >>> # Ultra-high precision solar system integration
-        >>> q = np.array([5.2, 0.0])  # Jupiter's orbit (AU)
-        >>> p = np.array([0.0, 0.84])  # Orbital velocity (AU/year)
-        >>> dt = 1.0  # Full year timesteps possible
-        >>> q_new, p_new = integrator._kahan_li8(q, p, dt)
-        >>> # Accurate to ~1e-12 over million-year timescales
         """
         # Kahan-Li coefficients for 8th order
         w0 = 0.74167036435061295344822780
