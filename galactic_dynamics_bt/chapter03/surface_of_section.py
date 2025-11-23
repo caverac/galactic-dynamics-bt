@@ -1,4 +1,4 @@
-"""Logarithmic potential model for dynamics analysis.
+"""Surface of section analysis for stellar orbits in logarithmic potentials.
 
 This module provides some functionality for studying stellar orbits in galaxies
 with logarithmic potentials. It includes:
@@ -20,7 +20,7 @@ Examples
 --------
 Basic orbit integration:
 
->>> params = LogarithmicPotentialParams(q=0.9, v0=1.0)
+>>> params = LogarithmicPotentialParams(q=0.9, v0=1.0, Rc=0.0)
 >>> model = LogarithmicPotential(params, Lz=0.2)
 >>> t, R, z, pR, pz = integrate_orbit(model, E=-0.8, R0=0.35, pR0=0.1, t_max=5.0, dt=0.01)
 
@@ -97,7 +97,7 @@ class Model(ABC, Generic[T]):
 
         Examples
         --------
-        >>> params = LogarithmicPotentialParams(q=0.9, v0=1.0)
+        >>> params = LogarithmicPotentialParams(q=0.9, v0=1.0, Rc=0.0)
         >>> model = LogarithmicPotential(params, Lz=0.2)
         """
         self.params = params
@@ -291,18 +291,23 @@ class LogarithmicPotentialParams:
         Characteristic velocity scale. Sets the amplitude of the rotation
         curve and the overall velocity scale of the system. In physical
         units, this would typically be in km/s.
+    Rc : float
+        Core radius parameter. Introduces a softening length scale that
+        prevents the potential from diverging at the center (R=0, z=0).
+        Useful for modeling systems with a finite central density.
 
     Examples
     --------
     >>> # Nearly spherical halo
-    >>> params = LogarithmicPotentialParams(q=0.9, v0=220.0)  # 220 km/s
+    >>> params = LogarithmicPotentialParams(q=0.9, v0=220.0, Rc=0.0)  # 220 km/s
     >>>
     >>> # Significantly flattened system
-    >>> params = LogarithmicPotentialParams(q=0.6, v0=1.0)   # Normalized units
+    >>> params = LogarithmicPotentialParams(q=0.6, v0=1.0, Rc=0.0)   # Normalized units
     """
 
     q: float
     v0: float
+    Rc: float
 
 
 class LogarithmicPotential(Model[LogarithmicPotentialParams]):
@@ -332,7 +337,7 @@ class LogarithmicPotential(Model[LogarithmicPotentialParams]):
     --------
     Create a model and compute properties:
 
-    >>> params = LogarithmicPotentialParams(q=0.8, v0=1.0)
+    >>> params = LogarithmicPotentialParams(q=0.8, v0=1.0, Rc=0.0)
     >>> model = LogarithmicPotential(params, Lz=0.2)
     >>> phi = model.potential(1.0, 0.5)  # Potential at (R,z) = (1,0.5)
     >>> F_R, F_z = model.potential_gradient(1.0, 0.5)  # Forces
@@ -340,15 +345,15 @@ class LogarithmicPotential(Model[LogarithmicPotentialParams]):
     Compute circular velocity at radius R:
 
     >>> R = 1.0
-    >>> F_R, _ = model.potential_gradient(R, 0.0)
-    >>> v_circ = np.sqrt(R * F_R)  # Should equal v0 for large R
+    >>> dPhi_dR, _ = model.potential_gradient(R, 0.0)
+    >>> v_circ = np.sqrt(R * dPhi_dR)  # Should equal v0 for large R
     """
 
     def potential(self, R: float, z: float) -> float:
         """
         Calculate the logarithmic potential at (R, z).
 
-        Implements: Phi(R,z) = (v0^2/2) * ln(R^2 + z^2/q^2)
+        Implements: Phi(R,z) = (v0^2/2) * ln(R^2 + z^2/q^2 + Rc^2)
 
         Parameters
         ----------
@@ -364,7 +369,7 @@ class LogarithmicPotential(Model[LogarithmicPotentialParams]):
 
         Examples
         --------
-        >>> model = LogarithmicPotential(LogarithmicPotentialParams(q=0.9, v0=1.0), Lz=0.2)
+        >>> model = LogarithmicPotential(LogarithmicPotentialParams(q=0.9, v0=1.0, Rc=0.0), Lz=0.2)
         >>> phi_center = model.potential(1.0, 0.0)    # At galactic plane
         >>> phi_above = model.potential(1.0, 0.5)     # Above plane
         >>> print(f"Potential difference: {phi_above - phi_center:.3f}")
@@ -372,7 +377,8 @@ class LogarithmicPotential(Model[LogarithmicPotentialParams]):
         """
         q = self.params.q
         v0 = self.params.v0
-        return 0.5 * v0**2 * float(np.log(R**2 + (z**2) / (q**2)))
+        Rc = self.params.Rc
+        return 0.5 * v0**2 * float(np.log(R**2 + (z**2) / (q**2) + Rc**2))
 
     def potential_gradient(self, R: float, z: float) -> tuple[float, float]:
         """
@@ -380,8 +386,8 @@ class LogarithmicPotential(Model[LogarithmicPotentialParams]):
 
         Computes the negative gradient: F = -grad Phi
 
-        dPhi/dR = -v0^2 * R / (R^2 + z^2/q^2)
-        dPhi/dz = -v0^2 * z / (q^2(R^2 + z^2/q^2))
+        dPhi/dR = -v0^2 * R / (R^2 + z^2/q^2 + Rc^2)
+        dPhi/dz = -v0^2 * z / (q^2(R^2 + z^2/q^2 + Rc^2))
 
         Parameters
         ----------
@@ -397,7 +403,8 @@ class LogarithmicPotential(Model[LogarithmicPotentialParams]):
         """
         q = self.params.q
         v0 = self.params.v0
-        denom = R**2 + (z**2) / (q**2)
+        Rc = self.params.Rc
+        denom = R**2 + (z**2) / (q**2) + Rc**2
         dR = (v0**2) * R / denom
         dz = (v0**2) * z / (q**2 * denom)
         return dR, dz
@@ -445,7 +452,9 @@ class LogarithmicPotential(Model[LogarithmicPotentialParams]):
 
         R = np.linspace(Rmin, Rmax, 500, endpoint=True)
         return R, np.sqrt(
-            2 * (E - 0.5 * self.params.v0**2 * np.log(R**2) - 0.5 * (Lz**2) / (R**2)) * (self.params.q**2)
+            2
+            * (E - 0.5 * self.params.v0**2 * np.log(R**2 + self.params.Rc**2) - 0.5 * (Lz**2) / (R**2))
+            * (self.params.q**2)
         )
 
 
@@ -665,7 +674,7 @@ def plot_orbit(q: float, axs: Axes) -> None:
     plane (R, z). Due to angular momentum conservation, the motion
     is confined to this 2D plane in the effective potential.
     """
-    model = LogarithmicPotential(LogarithmicPotentialParams(q=q, v0=1.0), Lz=0.2)
+    model = LogarithmicPotential(LogarithmicPotentialParams(q=q, v0=1.0, Rc=0.0), Lz=0.2)
     t, R, z, pR, pz = integrate_orbit(  # pylint: disable=unused-variable
         model,
         E=-0.8,
@@ -721,7 +730,7 @@ def plot_surface_of_section(q: float, axs: Axes) -> None:
     and contributions from meridional motion:
     L = √[(z*pR - R*pz)^2 + (R^2 + z^2)*Lz^2/R^2]
     """
-    model = LogarithmicPotential(LogarithmicPotentialParams(q=q, v0=1.0), Lz=0.2)
+    model = LogarithmicPotential(LogarithmicPotentialParams(q=q, v0=1.0, Rc=0.0), Lz=0.2)
     t, R, z, pR, pz = integrate_orbit(  # pylint: disable=unused-variable
         model,
         E=-0.8,
@@ -895,7 +904,7 @@ def plot_angular_momentum(path: Path | None = None) -> None:
         hspace=0.05,
     )
 
-    model = LogarithmicPotential(LogarithmicPotentialParams(q=0.9, v0=1.0), Lz=0.2)
+    model = LogarithmicPotential(LogarithmicPotentialParams(q=0.9, v0=1.0, Rc=0.0), Lz=0.2)
     t, R, z, pR, pz = integrate_orbit(  # pylint: disable=unused-variable
         model,
         E=-0.8,

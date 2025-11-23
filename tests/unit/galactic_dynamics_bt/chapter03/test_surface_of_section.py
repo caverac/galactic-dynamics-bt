@@ -1,4 +1,4 @@
-"""Unit tests for logarithmic potential module."""
+"""Unit tests for surface of section module."""
 
 from pathlib import Path
 from unittest.mock import Mock, patch
@@ -6,7 +6,7 @@ from unittest.mock import Mock, patch
 import numpy as np
 import pytest
 
-from galactic_dynamics_bt.chapter03.logarithmic_potential import (
+from galactic_dynamics_bt.chapter03.surface_of_section import (
     AxesArray,
     find_exact_intersection,
     integrate_orbit,
@@ -26,13 +26,13 @@ class TestLoggarithmicPotentialParams:
 
     def test_params_creation(self) -> None:
         """Test parameter creation with valid values."""
-        params = LogarithmicPotentialParams(q=0.9, v0=1.0)
+        params = LogarithmicPotentialParams(q=0.9, v0=1.0, Rc=0.0)
         assert params.q == 0.9
         assert params.v0 == 1.0
 
     def test_params_different_values(self) -> None:
         """Test with different parameter values."""
-        params = LogarithmicPotentialParams(q=0.6, v0=220.0)
+        params = LogarithmicPotentialParams(q=0.6, v0=220.0, Rc=0.0)
         assert params.q == 0.6
         assert params.v0 == 220.0
 
@@ -46,7 +46,7 @@ class TestLograrithmicPotential:
 
     def setup_method(self) -> None:
         """Set up test fixtures."""
-        self.params = LogarithmicPotentialParams(q=0.9, v0=1.0)
+        self.params = LogarithmicPotentialParams(q=0.9, v0=1.0, Rc=0.0)
         self.Lz = 0.2
         self.model = LogarithmicPotential(self.params, self.Lz)
 
@@ -169,10 +169,10 @@ class TestIntegrateOrbit:
 
     def setup_method(self) -> None:
         """Set up test fixtures."""
-        self.params = LogarithmicPotentialParams(q=0.9, v0=1.0)
+        self.params = LogarithmicPotentialParams(q=0.9, v0=1.0, Rc=0.0)
         self.model = LogarithmicPotential(self.params, 0.2)
 
-    @patch("galactic_dynamics_bt.chapter03.logarithmic_potential.SymplecticIntegrator")
+    @patch("galactic_dynamics_bt.chapter03.surface_of_section.SymplecticIntegrator")
     def test_integrate_orbit_mocked(self, mock_integrator_class: Mock) -> None:
         """Test orbit integration with mocked integrator."""
         # Mock the integrator
@@ -211,10 +211,10 @@ class TestFindExactIntersection:
 
     def setup_method(self) -> None:
         """Set up test fixtures."""
-        self.params = LogarithmicPotentialParams(q=0.9, v0=1.0)
+        self.params = LogarithmicPotentialParams(q=0.9, v0=1.0, Rc=0.0)
         self.model = LogarithmicPotential(self.params, 0.2)
 
-    @patch("galactic_dynamics_bt.chapter03.logarithmic_potential.RK45")
+    @patch("galactic_dynamics_bt.chapter03.surface_of_section.RK45")
     def test_find_exact_intersection_mocked(self, mock_rk45_class: Mock) -> None:
         """Test exact intersection finding with mocked integrator."""
         # Mock the RK45 solver
@@ -256,10 +256,10 @@ class TestSurfaceOfSection:
 
     def setup_method(self) -> None:
         """Set up test fixtures."""
-        self.params = LogarithmicPotentialParams(q=0.9, v0=1.0)
+        self.params = LogarithmicPotentialParams(q=0.9, v0=1.0, Rc=0.0)
         self.model = LogarithmicPotential(self.params, 0.2)
 
-    @patch("galactic_dynamics_bt.chapter03.logarithmic_potential.find_exact_intersection")
+    @patch("galactic_dynamics_bt.chapter03.surface_of_section.find_exact_intersection")
     def test_surface_of_section_mocked(self, mock_intersection: Mock) -> None:
         """Test surface of section with mocked intersection finding."""
         # Mock exact intersection
@@ -300,7 +300,7 @@ class TestSurfaceOfSection:
 class TestPlottingFunctions:
     """Test plotting functions with mocking to avoid slow execution."""
 
-    @patch("galactic_dynamics_bt.chapter03.logarithmic_potential.integrate_orbit")
+    @patch("galactic_dynamics_bt.chapter03.surface_of_section.integrate_orbit")
     @patch("matplotlib.pyplot.subplots")
     def test_plot_orbit_mocked(self, mock_subplots: Mock, mock_integrate: Mock) -> None:
         """Test plot_orbit function with mocking."""
@@ -325,9 +325,9 @@ class TestPlottingFunctions:
         # Check that plotting methods were called
         mock_ax.plot.assert_called_once()
 
-    @patch("galactic_dynamics_bt.chapter03.logarithmic_potential.integrate_orbit")
-    @patch("galactic_dynamics_bt.chapter03.logarithmic_potential.surface_of_section")
-    @patch("galactic_dynamics_bt.chapter03.logarithmic_potential.LogarithmicPotential")
+    @patch("galactic_dynamics_bt.chapter03.surface_of_section.integrate_orbit")
+    @patch("galactic_dynamics_bt.chapter03.surface_of_section.surface_of_section")
+    @patch("galactic_dynamics_bt.chapter03.surface_of_section.LogarithmicPotential")
     def test_plot_surface_of_section_mocked(
         self, mock_model_class: Mock, mock_surface: Mock, mock_integrate: Mock
     ) -> None:
@@ -368,8 +368,8 @@ class TestPlottingFunctions:
         # Check that zero_velocity_curve was called (twice - for regular and conserved L)
         assert mock_model.zero_velocity_curve.call_count == 2
 
-    @patch("galactic_dynamics_bt.chapter03.logarithmic_potential.plot_orbit")
-    @patch("galactic_dynamics_bt.chapter03.logarithmic_potential.plot_surface_of_section")
+    @patch("galactic_dynamics_bt.chapter03.surface_of_section.plot_orbit")
+    @patch("galactic_dynamics_bt.chapter03.surface_of_section.plot_surface_of_section")
     @patch("matplotlib.pyplot.subplots")
     @patch("matplotlib.pyplot.show")
     def test_plot_orbital_properties_mocked(
@@ -396,7 +396,7 @@ class TestPlottingFunctions:
         assert mock_plot_orbit.call_count == 2  # Two orbit plots
         assert mock_plot_surface.call_count == 2  # Two surface plots
 
-    @patch("galactic_dynamics_bt.chapter03.logarithmic_potential.integrate_orbit")
+    @patch("galactic_dynamics_bt.chapter03.surface_of_section.integrate_orbit")
     @patch("matplotlib.pyplot.subplots")
     def test_plot_angular_momentum_mocked(self, mock_subplots: Mock, mock_integrate: Mock) -> None:
         """Test plot_angular_momentum with mocking."""
@@ -423,7 +423,7 @@ class TestPlottingFunctions:
         mock_axs[0].plot.assert_called_once()
         mock_axs[1].plot.assert_called_once()
 
-    @patch("galactic_dynamics_bt.chapter03.logarithmic_potential.integrate_orbit")
+    @patch("galactic_dynamics_bt.chapter03.surface_of_section.integrate_orbit")
     @patch("matplotlib.pyplot.subplots")
     def test_plot_angular_momentum_save_path(self, mock_subplots: Mock, mock_integrate: Mock) -> None:
         """Test plot_angular_momentum with save path."""
@@ -457,7 +457,7 @@ class TestEdgeCases:
 
     def setup_method(self) -> None:
         """Set up test fixtures."""
-        self.params = LogarithmicPotentialParams(q=0.9, v0=1.0)
+        self.params = LogarithmicPotentialParams(q=0.9, v0=1.0, Rc=0.0)
         self.model = LogarithmicPotential(self.params, 0.2)
 
     def test_potential_very_small_radius(self) -> None:
@@ -480,7 +480,7 @@ class TestEdgeCases:
 
     def test_large_flattening(self) -> None:
         """Test with very flattened potential."""
-        params_flat = LogarithmicPotentialParams(q=0.1, v0=1.0)
+        params_flat = LogarithmicPotentialParams(q=0.1, v0=1.0, Rc=0.0)
         model_flat = LogarithmicPotential(params_flat, 0.2)
 
         # Should still work
@@ -489,7 +489,7 @@ class TestEdgeCases:
 
     def test_spherical_potential(self) -> None:
         """Test with spherical potential (q=1)."""
-        params_spherical = LogarithmicPotentialParams(q=1.0, v0=1.0)
+        params_spherical = LogarithmicPotentialParams(q=1.0, v0=1.0, Rc=0.0)
         model_spherical = LogarithmicPotential(params_spherical, 0.2)
 
         # z and R should contribute equally at same distance
@@ -514,7 +514,7 @@ class TestAxesArray:
 class TestPlotWithPath:
     """Test plotting functions with file paths."""
 
-    @patch("galactic_dynamics_bt.chapter03.logarithmic_potential.integrate_orbit")
+    @patch("galactic_dynamics_bt.chapter03.surface_of_section.integrate_orbit")
     @patch("matplotlib.pyplot.subplots")
     def test_plot_orbital_properties_with_path(self, mock_subplots: Mock, mock_integrate: Mock) -> None:
         """Test plot_orbital_properties with save path to cover the file save branch."""
@@ -529,8 +529,8 @@ class TestPlotWithPath:
 
         # Mock the plotting functions to avoid actual computation
         with (
-            patch("galactic_dynamics_bt.chapter03.logarithmic_potential.plot_orbit"),
-            patch("galactic_dynamics_bt.chapter03.logarithmic_potential.plot_surface_of_section"),
+            patch("galactic_dynamics_bt.chapter03.surface_of_section.plot_orbit"),
+            patch("galactic_dynamics_bt.chapter03.surface_of_section.plot_surface_of_section"),
         ):
 
             # Call function with path - this should cover line 836
