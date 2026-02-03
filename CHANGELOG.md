@@ -13,6 +13,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Testing infrastructure with pytest
 - Code quality tools (black, flake8, pylint, mypy)
 - MIT license and contribution guidelines
+## v0.8.2 (2025-11-23)
+
+### Fix
+
+- **chapter-03**: rename logarithmic potential module
+
 ## v0.8.1 (2025-11-22)
 
 ### Fix
