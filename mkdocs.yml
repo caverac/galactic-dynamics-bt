@@ -12,6 +12,8 @@ extra:
 
 theme:
   name: material
+  logo: assets/logo.svg
+  favicon: assets/favicon.svg
   features:
     - navigation.sections
     - content.code.copy
@@ -21,11 +23,15 @@ theme:
   palette:
     - media: "(prefers-color-scheme: light)"
       scheme: default
+      primary: custom
+      accent: cyan
       toggle:
         icon: material/weather-night
         name: "Switch to dark mode"
     - media: "(prefers-color-scheme: dark)"
       scheme: slate
+      primary: custom
+      accent: cyan
       toggle:
         icon: material/white-balance-sunny
         name: "Switch to light mode"
@@ -71,7 +77,11 @@ nav:
       - Problems 21-24: chapter02.3.md
   - Chapter 3| The Orbits of Stars:
       - Surfaces of section: chapter03-surfaces-of-section.md
+      - Bifurcations of orbit families: chapter03-bifurcation.md
 
 extra_javascript:
   - javascripts/mathjax.js
   - https://unpkg.com/mathjax@3/es5/tex-mml-chtml.js
+
+extra_css:
+  - stylesheets/galactic-theme.css

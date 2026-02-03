@@ -6,17 +6,20 @@ on:
 
 permissions:
   contents: write
-  pull-requests: write
+  pages: write
+  id-token: write
 
 concurrency:
-  group: ${{ github.workflow }}-${{ github.ref }}
+  group: release
   cancel-in-progress: false
 
 jobs:
   release:
-    name: Semantic Release
+    name: Tag & Release
     runs-on: ubuntu-latest
     if: "!startsWith(github.event.head_commit.message, 'bump:')"
+    outputs:
+      released: ${{ steps.bump.outputs.released }}
 
     steps:
       - name: Checkout
@@ -43,54 +46,73 @@ jobs:
           git config --local user.email "action@github.com"
           git config --local user.name "GitHub Action"
 
-      - name: Check if there are changes to release
-        id: check_changes
+      - name: Bump version
+        id: bump
         run: |
-          # Get the last version tag
-          LAST_TAG=$(git describe --tags --abbrev=0 2>/dev/null || echo "")
-
-          if [ -z "$LAST_TAG" ]; then
-            echo "No previous tags found, proceeding with release"
-            echo "has_changes=true" >> $GITHUB_OUTPUT
+          if uv run cz bump --yes 2>/dev/null; then
+            echo "released=true" >> $GITHUB_OUTPUT
+            echo "version=$(uv run cz version --project)" >> $GITHUB_OUTPUT
           else
-            # Check if there are any conventional commits since last tag
-            COMMITS=$(git log ${LAST_TAG}..HEAD --oneline --grep="^feat" --grep="^fix" --grep="^perf" --grep="^refactor" --grep="^BREAKING CHANGE" --extended-regexp)
-            if [ -n "$COMMITS" ]; then
-              echo "Found conventional commits since last tag:"
-              echo "$COMMITS"
-              echo "has_changes=true" >> $GITHUB_OUTPUT
-            else
-              echo "No conventional commits found since last tag"
-              echo "has_changes=false" >> $GITHUB_OUTPUT
-            fi
+            echo "released=false" >> $GITHUB_OUTPUT
           fi
 
-      - name: Bump version and update changelog
-        if: steps.check_changes.outputs.has_changes == 'true'
-        run: |
-          # Bump version and update changelog
-          uv run cz bump --yes
-
-          # Get the new version
-          NEW_VERSION=$(uv run cz version --project)
-          echo "NEW_VERSION=$NEW_VERSION" >> $GITHUB_ENV
-
-      - name: Push changes
-        if: steps.check_changes.outputs.has_changes == 'true'
-        run: |
-          git push origin main --follow-tags
+      - name: Push tag
+        if: steps.bump.outputs.released == 'true'
+        run: git push origin main --follow-tags
 
       - name: Create GitHub Release
-        if: steps.check_changes.outputs.has_changes == 'true'
-        uses: actions/create-release@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        if: steps.bump.outputs.released == 'true'
+        uses: softprops/action-gh-release@v2
         with:
-          tag_name: v${{ env.NEW_VERSION }}
-          release_name: Release v${{ env.NEW_VERSION }}
-          body: |
-            Changes in this Release
+          tag_name: v${{ steps.bump.outputs.version }}
+          generate_release_notes: true
 
-            See [CHANGELOG.md](https://github.com/${{ github.repository }}/blob/main/CHANGELOG.md) for details.
-          draft: false
-          prerelease: false
+  docs:
+    name: Deploy Docs
+    runs-on: ubuntu-latest
+    needs: release
+    if: always() && !failure() && !cancelled()
+
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          ref: main
+          fetch-depth: 0
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install uv
+        uses: astral-sh/setup-uv@v6
+        with:
+          enable-cache: true
+
+      - name: Install Pandoc
+        run: sudo apt-get update && sudo apt-get install -y pandoc
+
+      - name: Sync docs deps
+        run: uv sync --group docs
+
+      - name: Generate assets
+        run: |
+          mkdir -p docs/assets/generated
+          uv run python scripts/generate_assets.py
+
+      - name: Build docs
+        run: uv run mkdocs build --strict
+
+      - name: Upload Pages artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: ./site
+
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4

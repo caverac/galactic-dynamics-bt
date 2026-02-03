@@ -9,6 +9,8 @@ from matplotlib.ticker import AutoMinorLocator, MultipleLocator
 import numpy as np
 from scipy.integrate import quad
 
+from galactic_dynamics_bt.utils.assets import register_asset, save_figure_if_changed
+
 
 def sersic_profile(R: float, /, *, m: float = 4, Ie: float = 1, Re: float = 1) -> tuple[float, float]:
     """
@@ -19,15 +21,15 @@ def sersic_profile(R: float, /, *, m: float = 4, Ie: float = 1, Re: float = 1) -
 
         I(R) = Ie * exp(-b * ((R/Re)^(1/m) - 1))
 
-    where b ≈ 2*m - 0.324 is chosen so that Re contains half the total light, and m is the
-    Sérsic index. The classic de Vaucouleurs profile corresponds to m = 4.
+    where b ~ 2*m - 0.324 is chosen so that Re contains half the total light, and m is the
+    Sersic index. The classic de Vaucouleurs profile corresponds to m = 4.
 
     Parameters
     ----------
     R : float
         The projected radius at which to evaluate the profile, in the same units as Re.
     m : float, optional
-        The Sérsic index parameter. Default is 4 (classic de Vaucouleurs profile).
+        The Sersic index parameter. Default is 4 (classic de Vaucouleurs profile).
         - m = 1: Exponential profile (disk galaxies)
         - m = 4: de Vaucouleurs profile (elliptical galaxies)
         - m > 4: More concentrated profiles
@@ -70,7 +72,7 @@ def get_luminosity_sersic(r: float, /, *, m: float = 4, Ie: float = 1, Re: float
     The Abel integral transforms the observed surface brightness I(R) into the
     intrinsic luminosity density j(r) via:
 
-        j(r) = -(1/π) ∫[r to ∞] (dI/dR) / √(R² - r²) dR
+        j(r) = -(1/pi) integral[r to inf] (dI/dR) / sqrt(R^2 - r^2) dR
 
     Parameters
     ----------
@@ -78,7 +80,7 @@ def get_luminosity_sersic(r: float, /, *, m: float = 4, Ie: float = 1, Re: float
         The three-dimensional radius at which to calculate the luminosity density,
         in the same units as Re.
     m : float, optional
-        The Sérsic index parameter. Default is 4 (classic de Vaucouleurs profile).
+        The Sersic index parameter. Default is 4 (classic de Vaucouleurs profile).
         - m = 1: Exponential profile (disk galaxies)
         - m = 4: de Vaucouleurs profile (elliptical galaxies)
         - m > 4: More concentrated profiles
@@ -119,14 +121,15 @@ def get_luminosity_sersic(r: float, /, *, m: float = 4, Ie: float = 1, Re: float
     return float(-q / np.pi)
 
 
+@register_asset("sersic_profile.png")
 def plot_sersic_profile(path: Path | None = None) -> None:
     """
-    Plot the luminosity density profiles for different Sérsic indices.
+    Plot the luminosity density profiles for different Sersic indices.
 
     Creates a log-log plot showing the deprojected luminosity density j(r)
-    as a function of radius for three different Sérsic indices (m = 3, 4, 5).
+    as a function of radius for three different Sersic indices (m = 3, 4, 5).
     The plot illustrates how the concentration of the profile changes with
-    the Sérsic index parameter.
+    the Sersic index parameter.
 
     Parameters
     ----------
@@ -188,7 +191,8 @@ def plot_sersic_profile(path: Path | None = None) -> None:
     axs.legend(loc="lower left", frameon=False)
 
     if path:
-        fig.savefig(
+        save_figure_if_changed(
+            fig,
             path,
             dpi=150,
             bbox_inches="tight",

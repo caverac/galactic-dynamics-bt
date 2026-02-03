@@ -15,6 +15,8 @@ import numpy as np
 from scipy.integrate import quad
 from scipy.interpolate import interp1d
 
+from galactic_dynamics_bt.utils.assets import register_asset, save_figure_if_changed
+
 T = TypeVar("T")
 logger = logging.getLogger(__name__)
 
@@ -267,6 +269,7 @@ class MultipoleExpansion:
         return float(-4 * np.pi * phi)
 
 
+@register_asset("multipole_expansion_satoh.png")
 def plot_multipole_expansion_satoh(path: Path | None = None) -> None:
     """Plot an example of the multipole expansion against the exact potential."""
     fig: Figure
@@ -356,7 +359,8 @@ def plot_multipole_expansion_satoh(path: Path | None = None) -> None:
     axs.legend(handles=legend_elements, loc="upper right", frameon=False)
 
     if path:
-        fig.savefig(
+        save_figure_if_changed(
+            fig,
             path,
             dpi=150,
             bbox_inches="tight",

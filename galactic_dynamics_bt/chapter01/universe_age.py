@@ -8,6 +8,8 @@ from matplotlib.figure import Figure
 import numpy as np
 from scipy.integrate import quad
 
+from galactic_dynamics_bt.utils.assets import register_asset, save_figure_if_changed
+
 
 def find_universe_age(
     z: float,
@@ -45,6 +47,7 @@ def find_universe_age(
     return float(age * 1.02e3 / H0)
 
 
+@register_asset("universe_age.png")
 def plot_universe_age(path: Path | None = None) -> None:
     """
     Plot the age of the universe as a function of redshift.
@@ -117,7 +120,8 @@ def plot_universe_age(path: Path | None = None) -> None:
     axs.legend(loc="lower right", frameon=False)
 
     if path:
-        fig.savefig(
+        save_figure_if_changed(
+            fig,
             path,
             dpi=150,
             bbox_inches="tight",

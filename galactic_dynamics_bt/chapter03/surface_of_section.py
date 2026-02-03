@@ -41,10 +41,12 @@ from matplotlib.axes import Axes
 from matplotlib.figure import Figure
 from matplotlib.ticker import AutoMinorLocator, MultipleLocator
 import numpy as np
+import numpy.typing as npt
 from scipy.integrate import RK45
 from scipy.optimize import root_scalar
 
 from galactic_dynamics_bt.chapter03.symplectic_integrators import SymplecticIntegrator
+from galactic_dynamics_bt.utils.assets import register_asset, save_figure_if_changed
 
 
 T = TypeVar("T")
@@ -111,20 +113,20 @@ class Model(ABC, Generic[T]):
         Parameters
         ----------
         R : float
-            Radial distance from the z-axis (R ≥ 0)
+            Radial distance from the z-axis (R >= 0)
         z : float
             Height above/below the galactic plane
 
         Returns
         -------
         float
-            Gravitational potential Φ(R,z) in model units
+            Gravitational potential Phi(R,z) in model units
 
         Notes
         -----
         The potential should be defined such that the force is F = -grad Phi.
         For bound orbits, the potential is typically negative with
-        Phi → 0 as r → ∞.
+        Phi -> 0 as r -> infinity.
         """
 
     @abstractmethod
@@ -150,7 +152,7 @@ class Model(ABC, Generic[T]):
         """
 
     @abstractmethod
-    def zero_velocity_curve(self, E: float, Lz: float) -> tuple[np.ndarray, np.ndarray]:
+    def zero_velocity_curve(self, E: float, Lz: float) -> tuple[npt.NDArray[np.float64], npt.NDArray[np.float64]]:
         """
         Calculate the zero-velocity curve for given energy and angular momentum.
 
@@ -166,7 +168,7 @@ class Model(ABC, Generic[T]):
 
         Returns
         -------
-        tuple[np.ndarray, np.ndarray]
+        tuple[npt.NDArray[np.float64], npt.NDArray[np.float64]]
             Arrays (R, z) defining the zero-velocity curve boundary
 
         Notes
@@ -263,7 +265,7 @@ class Model(ABC, Generic[T]):
         -----
         Assumes the orbit starts at the galactic plane (z = 0) and calculates
         the required vertical momentum from energy conservation:
-        pz = √[2(E - pR^2/2 - Phi_eff(R,0))]
+        pz = sqrt[2(E - pR^2/2 - Phi_eff(R,0))]
         """
         E -= 0.5 * pR**2
         z = 0.0
@@ -284,7 +286,7 @@ class LogarithmicPotentialParams:
     Attributes
     ----------
     q : float
-        Flattening parameter (0 < q ≤ 1). Values q < 1 correspond to
+        Flattening parameter (0 < q <= 1). Values q < 1 correspond to
         oblate (flattened) systems, while q = 1 gives a spherical potential.
         Typical values for galaxy halos are q ~ 0.6-0.9.
     v0 : float
@@ -318,7 +320,7 @@ class LogarithmicPotential(Model[LogarithmicPotentialParams]):
     Phi(R,z) = (v0^2/2) * ln(R^2 + z^2/q^2)
 
     This potential has several attractive properties:
-    - Produces flat rotation curves: v_c(∞) = v0
+    - Produces flat rotation curves: v_c(infinity) = v0
     - Simple analytical form allowing exact calculations
     - Realistic for modeling galaxy halos and dark matter
     - Supports both bound and unbound orbits depending on energy
@@ -409,7 +411,7 @@ class LogarithmicPotential(Model[LogarithmicPotentialParams]):
         dz = (v0**2) * z / (q**2 * denom)
         return dR, dz
 
-    def zero_velocity_curve(self, E: float, Lz: float) -> tuple[np.ndarray, np.ndarray]:
+    def zero_velocity_curve(self, E: float, Lz: float) -> tuple[npt.NDArray[np.float64], npt.NDArray[np.float64]]:
         """
         Calculate the zero-velocity curve for given energy and angular momentum.
 
@@ -425,7 +427,7 @@ class LogarithmicPotential(Model[LogarithmicPotentialParams]):
 
         Returns
         -------
-        tuple[np.ndarray, np.ndarray]
+        tuple[npt.NDArray[np.float64], npt.NDArray[np.float64]]
             Arrays (R, z) defining the zero-velocity curve
 
         Notes
@@ -436,7 +438,7 @@ class LogarithmicPotential(Model[LogarithmicPotentialParams]):
         E = Phi(R,z) + Lz^2/(2R^2)
 
         For bound orbits (E < 0), this creates a finite allowed region.
-        For unbound orbits (E ≥ 0), particles can escape to infinity.
+        For unbound orbits (E >= 0), particles can escape to infinity.
 
         The calculation first finds the radial turning points where
         the effective potential in the plane equals the energy, then
@@ -465,7 +467,13 @@ def integrate_orbit(
     pR0: float,
     t_max: float,
     dt: float,
-) -> tuple[np.ndarray, np.ndarray, np.ndarray, np.ndarray, np.ndarray]:
+) -> tuple[
+    npt.NDArray[np.float64],
+    npt.NDArray[np.float64],
+    npt.NDArray[np.float64],
+    npt.NDArray[np.float64],
+    npt.NDArray[np.float64],
+]:
     """
     Integrate an orbit in the given model.
 
@@ -486,16 +494,22 @@ def integrate_orbit(
 
     Returns
     -------
-    tuple[np.ndarray, np.ndarray, np.ndarray, np.ndarray, np.ndarray]
+    tuple[
+        npt.NDArray[np.float64],
+        npt.NDArray[np.float64],
+        npt.NDArray[np.float64],
+        npt.NDArray[np.float64],
+        npt.NDArray[np.float64],
+    ]
         Arrays of time, R, z, pR, and pz values along the orbit.
     """
     R0, z0, pR0, pz0 = model.find_initial_conditions(E, R0, pR0)
 
-    t = np.arange(0, t_max, dt)
+    t: npt.NDArray[np.float64] = np.arange(0, t_max, dt, dtype=np.float64)
     integrator = SymplecticIntegrator(
         lambda p: p,
         lambda q: np.array(model.effective_potential_gradient(q[0], q[1])),
-        np.array([R0, z0, pR0, pz0]),
+        np.array([R0, z0, pR0, pz0], dtype=np.float64),
         t,
         order=2,
         H=lambda q, p: model.effective_potential(q[0], q[1]) + 0.5 * (p[0] ** 2 + p[1] ** 2),
@@ -511,7 +525,7 @@ def integrate_orbit(
 
 def find_exact_intersection(R: float, z: float, pR: float, pz: float, model: Model[T]) -> tuple[float, float]:
     """
-    Find exact intersection with Poincaré section plane using numerical integration.
+    Find exact intersection with Poincare section plane using numerical integration.
 
     Uses backward integration from a point (R, z, pR, pz) to find the exact
     location where the orbit crosses z = 0 with pz > 0. This provides accurate
@@ -552,11 +566,11 @@ def find_exact_intersection(R: float, z: float, pR: float, pz: float, model: Mod
     in the Poincare coordinates.
     """
 
-    def derivatives(z_curr: float, y: np.ndarray) -> np.ndarray:
+    def derivatives(z_curr: float, y: npt.NDArray[np.float64]) -> npt.NDArray[np.float64]:
         t_curr, pz_curr, R_curr, pR_curr = y  # pylint: disable=unused-variable
-        dR_dt, dz_dt = model.effective_potential_gradient(R_curr, z_curr)
-        dpR_dz = -dR_dt / pz_curr
-        dpz_dz = -dz_dt / pz_curr
+        dpR_dt, dpz_dt = model.effective_potential_gradient(R_curr, z_curr)
+        dpR_dz = -dpR_dt / pz_curr
+        dpz_dz = -dpz_dt / pz_curr
         dR_dz = pR_curr / pz_curr
         return np.array([1 / pz_curr, dpz_dz, dR_dz, dpR_dz])
 
@@ -571,13 +585,13 @@ def find_exact_intersection(R: float, z: float, pR: float, pz: float, model: Mod
 
 def surface_of_section(
     model: Model[T],
-    R: np.ndarray,
-    z: np.ndarray,
-    pR: np.ndarray,
-    pz: np.ndarray,
-) -> tuple[np.ndarray, np.ndarray]:
+    R: npt.NDArray[np.float64],
+    z: npt.NDArray[np.float64],
+    pR: npt.NDArray[np.float64],
+    pz: npt.NDArray[np.float64],
+) -> tuple[npt.NDArray[np.float64], npt.NDArray[np.float64]]:
     """
-    Compute Poincaré surface of section for orbital analysis.
+    Compute Poincare surface of section for orbital analysis.
 
     Generates a surface of section by recording (R, pR) coordinates
     whenever the orbit crosses the z = 0 plane with pz > 0. This
@@ -588,18 +602,18 @@ def surface_of_section(
     ----------
     model : Model[T]
         Galaxy potential model for exact intersection calculations
-    R : np.ndarray
+    R : npt.NDArray[np.float64]
         Array of radial coordinates from orbit integration
-    z : np.ndarray
+    z : npt.NDArray[np.float64]
         Array of vertical coordinates from orbit integration
-    pR : np.ndarray
+    pR : npt.NDArray[np.float64]
         Array of radial momenta from orbit integration
-    pz : np.ndarray
+    pz : npt.NDArray[np.float64]
         Array of vertical momenta from orbit integration
 
     Returns
     -------
-    tuple[np.ndarray, np.ndarray]
+    tuple[npt.NDArray[np.float64], npt.NDArray[np.float64]]
         Arrays of (R, pR) coordinates at each z = 0 crossing with pz > 0
 
     Notes
@@ -657,7 +671,7 @@ def plot_orbit(q: float, axs: Axes) -> None:
     Parameters
     ----------
     q : float
-        Flattening parameter for the logarithmic potential (0 < q ≤ 1)
+        Flattening parameter for the logarithmic potential (0 < q <= 1)
     axs : Axes
         Matplotlib axes object for plotting
 
@@ -699,7 +713,7 @@ def plot_orbit(q: float, axs: Axes) -> None:
 # pylint: disable=too-many-locals
 def plot_surface_of_section(q: float, axs: Axes) -> None:
     """
-    Plot Poincaré surface of section with additional reference curves.
+    Plot Poincare surface of section with additional reference curves.
 
     Creates a comprehensive surface of section plot showing:
     1. Orbit points at z=0 crossings with pz>0
@@ -709,7 +723,7 @@ def plot_surface_of_section(q: float, axs: Axes) -> None:
     Parameters
     ----------
     q : float
-        Flattening parameter for the logarithmic potential (0 < q ≤ 1)
+        Flattening parameter for the logarithmic potential (0 < q <= 1)
     axs : Axes
         Matplotlib axes object for plotting
 
@@ -723,12 +737,12 @@ def plot_surface_of_section(q: float, axs: Axes) -> None:
     - Integration: t_max=100.0, dt=0.01 (longer than orbit plot)
 
     Reference curves:
-    - Solid black lines: Zero-velocity curves at z = ±z_max(R)
+    - Solid black lines: Zero-velocity curves at z = +/-z_max(R)
     - Dashed black lines: Constant total angular momentum curves
 
     The total angular momentum L includes both the z-component Lz
     and contributions from meridional motion:
-    L = √[(z*pR - R*pz)^2 + (R^2 + z^2)*Lz^2/R^2]
+    L = sqrt[(z*pR - R*pz)^2 + (R^2 + z^2)*Lz^2/R^2]
     """
     model = LogarithmicPotential(LogarithmicPotentialParams(q=q, v0=1.0, Rc=0.0), Lz=0.2)
     t, R, z, pR, pz = integrate_orbit(  # pylint: disable=unused-variable
@@ -768,6 +782,7 @@ def plot_surface_of_section(q: float, axs: Axes) -> None:
     axs.plot(R_tac, -pR_tac, "k--", linewidth=1)
 
 
+@register_asset("orbital_properties.png")
 def plot_orbital_properties(path: Path | None = None) -> None:
     """
     Create comprehensive 2x2 plot comparing orbital properties for different flattenings.
@@ -780,7 +795,7 @@ def plot_orbital_properties(path: Path | None = None) -> None:
     - Top row: Orbital trajectories in (R, z) plane
       - Left (q=0.9): Nearly spherical potential
       - Right (q=0.6): Significantly flattened potential
-    - Bottom row: Poincaré surfaces of section at z=0
+    - Bottom row: Poincare surfaces of section at z=0
       - Left (q=0.9): Surface of section for spherical case
       - Right (q=0.6): Surface of section for flattened case
 
@@ -842,7 +857,8 @@ def plot_orbital_properties(path: Path | None = None) -> None:
     plot_surface_of_section(0.6, axs[1, 1])
 
     if path:
-        fig.savefig(
+        save_figure_if_changed(
+            fig,
             path,
             dpi=150,
             bbox_inches="tight",
@@ -853,6 +869,7 @@ def plot_orbital_properties(path: Path | None = None) -> None:
         plt.show()
 
 
+@register_asset("angular_momentum.png")
 def plot_angular_momentum(path: Path | None = None) -> None:
     """
     Plot angular momentum evolution over time for an orbit in a logarithmic potential.
@@ -870,7 +887,7 @@ def plot_angular_momentum(path: Path | None = None) -> None:
     Notes
     -----
     The total angular momentum is calculated as:
-    L = √[(z*pR - R*pz)^2 + (R^2 + z^2)*Lz^2/R^2]
+    L = sqrt[(z*pR - R*pz)^2 + (R^2 + z^2)*Lz^2/R^2]
 
     Fixed parameters used:
     - Logarithmic potential with q=0.9, v0=1.0
@@ -937,7 +954,8 @@ def plot_angular_momentum(path: Path | None = None) -> None:
     axs[1].plot(t, L, "k-", label="$L$")
 
     if path:
-        fig.savefig(
+        save_figure_if_changed(
+            fig,
             path,
             dpi=150,
             bbox_inches="tight",

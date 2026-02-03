@@ -9,9 +9,12 @@ from matplotlib.figure import Figure
 from matplotlib.ticker import AutoMinorLocator, MultipleLocator
 import numpy as np
 
+from galactic_dynamics_bt.utils.assets import register_asset, save_figure_if_changed
+
 logger = logging.getLogger(__name__)
 
 
+@register_asset("frw_models.png")
 def plot_frw_models(path: Path | None = None) -> None:
     """
     Plot the FRW model parameter space.
@@ -86,7 +89,8 @@ def plot_frw_models(path: Path | None = None) -> None:
     axs.text(0.3, 1.5, "bounce", ha="center", va="center", rotation=60, transform_rotates_text=True)
 
     if path:
-        fig.savefig(
+        save_figure_if_changed(
+            fig,
             path,
             dpi=150,
             bbox_inches="tight",

@@ -173,8 +173,9 @@ class TestPlotUniverseAge:
         mock_axs.set_yscale.assert_called_with("log")
         mock_axs.set_xlim.assert_called()
 
+    @patch("galactic_dynamics_bt.chapter01.universe_age.save_figure_if_changed")
     @patch("galactic_dynamics_bt.chapter01.universe_age.plt")
-    def test_plot_saves_figure(self, mock_plt: MagicMock) -> None:
+    def test_plot_saves_figure(self, mock_plt: MagicMock, mock_save: MagicMock) -> None:
         """Test that the figure is saved to the correct location."""
 
         mock_fig = MagicMock()
@@ -184,14 +185,11 @@ class TestPlotUniverseAge:
         output_path = Path("docs/assets/generated/universe_age.png")
         plot_universe_age(output_path)
 
-        # Check that savefig was called with correct parameters
-        mock_fig.savefig.assert_called_once_with(
-            output_path,
-            dpi=150,
-            bbox_inches="tight",
-            facecolor="white",
-            edgecolor="none",
-        )
+        # Check that save_figure_if_changed was called with correct parameters
+        mock_save.assert_called_once()
+        call_args = mock_save.call_args
+        assert call_args[0][0] == mock_fig  # First positional arg is figure
+        assert call_args[0][1] == output_path  # Second positional arg is path
 
     @patch("galactic_dynamics_bt.chapter01.universe_age.plt")
     def test_plot_shows_figure(self, mock_plt: MagicMock) -> None:

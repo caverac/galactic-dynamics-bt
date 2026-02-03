@@ -252,18 +252,22 @@ class TestPlotMultipoleExpansionSatoh:
     """Test the plot_multipole_expansion_satoh function."""
 
     @patch("galactic_dynamics_bt.chapter02.multipole_expansion.plt")
+    @patch("galactic_dynamics_bt.chapter02.multipole_expansion.MultipoleExpansion")
     @patch.object(SatohModel, "potential")
-    @patch.object(MultipoleExpansion, "compute_potential")
     def test_plot_with_mocked_potentials(
         self,
-        mock_compute_potential: Mock,
         mock_satoh_potential: Mock,
+        mock_multipole_expansion_class: Mock,
         mock_plt: Mock,
     ) -> None:
         """Test the plotting function with mocked expensive computations."""
         # Mock the expensive potential calculations
         mock_satoh_potential.return_value = -1.0
-        mock_compute_potential.return_value = -0.95
+
+        # Mock MultipoleExpansion class to avoid expensive initialization
+        mock_expansion_instance = Mock()
+        mock_expansion_instance.compute_potential.return_value = -0.95
+        mock_multipole_expansion_class.return_value = mock_expansion_instance
 
         # Mock matplotlib components
         mock_fig = Mock()
@@ -295,21 +299,28 @@ class TestPlotMultipoleExpansionSatoh:
 
         # Verify expensive computations were called but mocked
         assert mock_satoh_potential.call_count > 0  # Called many times for grid
-        assert mock_compute_potential.call_count > 0  # Called many times for grid
+        assert mock_expansion_instance.compute_potential.call_count > 0  # Called many times for grid
+
+        # Verify MultipoleExpansion was instantiated twice (l_max=4 and l_max=6)
+        assert mock_multipole_expansion_class.call_count == 2
 
     @patch("galactic_dynamics_bt.chapter02.multipole_expansion.plt")
+    @patch("galactic_dynamics_bt.chapter02.multipole_expansion.MultipoleExpansion")
     @patch.object(SatohModel, "potential")
-    @patch.object(MultipoleExpansion, "compute_potential")
     def test_plot_with_save_path(
         self,
-        mock_compute_potential: Mock,
         mock_satoh_potential: Mock,
+        mock_multipole_expansion_class: Mock,
         mock_plt: Mock,
     ) -> None:
         """Test the plotting function with save path."""
         # Mock the expensive potential calculations
         mock_satoh_potential.return_value = -1.0
-        mock_compute_potential.return_value = -0.95
+
+        # Mock MultipoleExpansion class to avoid expensive initialization
+        mock_expansion_instance = Mock()
+        mock_expansion_instance.compute_potential.return_value = -0.95
+        mock_multipole_expansion_class.return_value = mock_expansion_instance
 
         # Mock matplotlib components
         mock_fig = Mock()
@@ -335,18 +346,22 @@ class TestPlotMultipoleExpansionSatoh:
         mock_plt.show.assert_not_called()
 
     @patch("galactic_dynamics_bt.chapter02.multipole_expansion.plt")
+    @patch("galactic_dynamics_bt.chapter02.multipole_expansion.MultipoleExpansion")
     @patch.object(SatohModel, "potential")
-    @patch.object(MultipoleExpansion, "compute_potential")
     def test_satoh_model_parameters(
         self,
-        mock_compute_potential: Mock,
         mock_satoh_potential: Mock,
+        mock_multipole_expansion_class: Mock,
         mock_plt: Mock,
     ) -> None:
         """Test that the function uses correct Satoh model parameters."""
         # Mock the expensive potential calculations
         mock_satoh_potential.return_value = -1.0
-        mock_compute_potential.return_value = -0.95
+
+        # Mock MultipoleExpansion class to avoid expensive initialization
+        mock_expansion_instance = Mock()
+        mock_expansion_instance.compute_potential.return_value = -0.95
+        mock_multipole_expansion_class.return_value = mock_expansion_instance
 
         # Mock matplotlib components
         mock_fig = Mock()
@@ -360,21 +375,25 @@ class TestPlotMultipoleExpansionSatoh:
         # We can't directly verify this without modifying the function,
         # but we can ensure the mocked methods were called
         assert mock_satoh_potential.call_count > 0
-        assert mock_compute_potential.call_count > 0
+        assert mock_expansion_instance.compute_potential.call_count > 0
 
     @patch("galactic_dynamics_bt.chapter02.multipole_expansion.plt")
+    @patch("galactic_dynamics_bt.chapter02.multipole_expansion.MultipoleExpansion")
     @patch.object(SatohModel, "potential")
-    @patch.object(MultipoleExpansion, "compute_potential")
     def test_multipole_expansion_parameters(
         self,
-        mock_compute_potential: Mock,
         mock_satoh_potential: Mock,
+        mock_multipole_expansion_class: Mock,
         mock_plt: Mock,
     ) -> None:
         """Test that MultipoleExpansion is created with correct parameters."""
         # Mock the expensive potential calculations
         mock_satoh_potential.return_value = -1.0
-        mock_compute_potential.return_value = -0.95
+
+        # Mock MultipoleExpansion class to avoid expensive initialization
+        mock_expansion_instance = Mock()
+        mock_expansion_instance.compute_potential.return_value = -0.95
+        mock_multipole_expansion_class.return_value = mock_expansion_instance
 
         # Mock matplotlib components
         mock_fig = Mock()
@@ -384,10 +403,10 @@ class TestPlotMultipoleExpansionSatoh:
         # Call the plotting function
         plot_multipole_expansion_satoh()
 
-        # Verify that compute_potential was called multiple times
-        # (once for l_max=4 expansion and once for l_max=6 expansion)
-        assert mock_compute_potential.call_count > 0
-
-        # The actual grid evaluation happens during the contour plotting
-        # so we expect many calls to the mocked methods
-        assert mock_satoh_potential.call_count > 0
+        # Verify that MultipoleExpansion was called with correct parameters
+        # First call: l_max=4, second call: l_max=6
+        assert mock_multipole_expansion_class.call_count == 2
+        calls = mock_multipole_expansion_class.call_args_list
+        # Check l_max values (second positional argument)
+        assert calls[0][0][1] == 4  # First call: l_max=4
+        assert calls[1][0][1] == 6  # Second call: l_max=6

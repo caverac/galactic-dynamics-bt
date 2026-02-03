@@ -81,7 +81,7 @@ class TestSymplecticIntegrator:
 
     def test_harmonic_oscillator_period(self) -> None:
         """Test that harmonic oscillator has correct period."""
-        # For unit mass and spring constant, period should be 2π
+        # For unit mass and spring constant, period should be 2*pi
         t = np.linspace(0, 2 * np.pi, 200)
         integrator = SymplecticIntegrator(self.dT_harmonic, self.dV_harmonic, self.y0_1d, t, order=2)
 

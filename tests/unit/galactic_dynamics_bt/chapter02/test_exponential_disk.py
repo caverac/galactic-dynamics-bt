@@ -301,7 +301,7 @@ class TestPhysicalConsistency(unittest.TestCase):
 
     def test_mass_conservation(self) -> None:
         """Test that the integrated mass is finite and positive."""
-        # Mass = integral of 2π R ρ(R) dR
+        # Mass = integral of 2*pi * R * rho(R) dR
         with patch("galactic_dynamics_bt.chapter02.exponential_disk.quad") as mock_quad:
 
             def mock_mass_integrand(R: float) -> float:

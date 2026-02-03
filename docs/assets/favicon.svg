@@ -1,0 +1,39 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
+  <defs>
+    <radialGradient id="core" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" style="stop-color:#fff4e0"/>
+      <stop offset="60%" style="stop-color:#9966cc;stop-opacity:0.6"/>
+      <stop offset="100%" style="stop-color:#0f0f23;stop-opacity:0"/>
+    </radialGradient>
+    <linearGradient id="spiral" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#00d4ff"/>
+      <stop offset="100%" style="stop-color:#7c3aed"/>
+    </linearGradient>
+  </defs>
+
+  <!-- Background -->
+  <circle cx="16" cy="16" r="15" fill="#0f0f23" stroke="#1e3a5f" stroke-width="1"/>
+
+  <!-- Core glow -->
+  <circle cx="16" cy="16" r="8" fill="url(#core)"/>
+
+  <!-- Simplified spiral arm 1 -->
+  <path d="M 16 16 Q 20 12, 26 12 Q 28 20, 22 26"
+        fill="none" stroke="url(#spiral)" stroke-width="2.5" stroke-linecap="round" opacity="0.9"/>
+
+  <!-- Simplified spiral arm 2 -->
+  <path d="M 16 16 Q 12 20, 6 20 Q 4 12, 10 6"
+        fill="none" stroke="url(#spiral)" stroke-width="2.5" stroke-linecap="round" opacity="0.9"/>
+
+  <!-- Orbit ring -->
+  <ellipse cx="16" cy="16" rx="11" ry="5"
+           fill="none" stroke="#00d4ff" stroke-width="0.8"
+           transform="rotate(-15, 16, 16)" opacity="0.5"/>
+
+  <!-- Center core -->
+  <circle cx="16" cy="16" r="2" fill="#ffffff"/>
+
+  <!-- Small star -->
+  <circle cx="6" cy="8" r="1" fill="#ffffff" opacity="0.7"/>
+  <circle cx="26" cy="24" r="0.8" fill="#ffffff" opacity="0.6"/>
+</svg>

@@ -68,8 +68,9 @@ class TestSersicProfile:
         # Should scale linearly with Ie
         assert np.isclose(j2 / j1, 2.0, rtol=1e-2)
 
+    @patch("galactic_dynamics_bt.chapter01.sersic_profile.save_figure_if_changed")
     @patch("matplotlib.pyplot.subplots")
-    def test_plot_sersic_profile_creates_figure(self, mock_subplots: MagicMock) -> None:
+    def test_plot_sersic_profile_creates_figure(self, mock_subplots: MagicMock, mock_save: MagicMock) -> None:
         """Test that plot_sersic_profile creates a matplotlib figure."""
 
         mock_fig = MagicMock()
@@ -91,14 +92,11 @@ class TestSersicProfile:
         # Verify plot elements
         assert mock_ax.plot.call_count >= 1  # At least one profile plotted
 
-        # Verify figure saving
-        mock_fig.savefig.assert_called_once_with(
-            output_path,
-            dpi=150,
-            bbox_inches="tight",
-            facecolor="white",
-            edgecolor="none",
-        )
+        # Verify figure saving via save_figure_if_changed
+        mock_save.assert_called_once()
+        call_args = mock_save.call_args
+        assert call_args[0][0] == mock_fig  # First positional arg is figure
+        assert call_args[0][1] == output_path  # Second positional arg is path
 
     @patch("matplotlib.pyplot.subplots")
     def test_plot_sersic_profile_shows_figure(self, mock_subplots: MagicMock) -> None:

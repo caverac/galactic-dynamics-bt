@@ -1,24 +1,29 @@
-# Pre-commit hooks configuration
-# Install with: uv run pre-commit install
-# Run manually with: uv run pre-commit run --all-files
-
 repos:
-  # Black - Code formatter
   - repo: https://github.com/psf/black
-    rev: 25.9.0
+    rev: 24.4.2
     hooks:
       - id: black
+        language_version: python3.12
 
-  # Flake8 - Style guide enforcement
   - repo: https://github.com/pycqa/flake8
-    rev: 7.3.0
+    rev: 7.0.0
     hooks:
       - id: flake8
         additional_dependencies:
           - flake8-docstrings
           - flake8-import-order
 
-  # Pylint - Code analysis (local hook for package imports)
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v4.6.0
+    hooks:
+      - id: trailing-whitespace
+      - id: end-of-file-fixer
+      - id: check-yaml
+        exclude: mkdocs.yml
+      - id: check-toml
+      - id: check-merge-conflict
+      - id: check-added-large-files
+
   - repo: local
     hooks:
       - id: pylint
@@ -26,50 +31,19 @@ repos:
         entry: uv run pylint
         language: system
         types: [python]
-        require_serial: false
+        args: ["--rcfile=pyproject.toml"]
 
-  # pydocstyle - Docstring style checker
-  - repo: https://github.com/pycqa/pydocstyle
-    rev: 6.3.0
-    hooks:
-      - id: pydocstyle
-
-  # MyPy - Static type checker
-  - repo: https://github.com/pre-commit/mirrors-mypy
-    rev: v1.11.0
-    hooks:
       - id: mypy
-        additional_dependencies:
-          - numpy
-          - scipy-stubs>=1.11.0
-          - matplotlib
-          - dacite
+        name: mypy
+        entry: uv run mypy
+        language: system
+        types: [python]
+        pass_filenames: false
+        args: ["galactic_dynamics_bt"]
 
-  # Optional: pytest (commented out as requested)
-  # - repo: local
-  #   hooks:
-  #     - id: pytest
-  #       name: pytest
-  #       entry: uv run pytest
-  #       language: system
-  #       pass_filenames: false
-  #       always_run: true
-  #       args: [--tb=short]
-
-  # Built-in hooks for common issues
-  - repo: https://github.com/pre-commit/pre-commit-hooks
-    rev: v5.0.0
-    hooks:
-      - id: trailing-whitespace
-      - id: end-of-file-fixer
-      - id: check-yaml
-      - id: check-toml
-      - id: check-merge-conflict
-      - id: check-added-large-files
-      - id: debug-statements
-
-# Configuration
-default_install_hook_types: [pre-commit, pre-push]
-default_stages: [pre-commit]
-fail_fast: false
-minimum_pre_commit_version: "4.3.0"
+      - id: affected-tests
+        name: affected tests
+        entry: uv run python scripts/run_affected_tests.py
+        language: system
+        types: [python]
+        pass_filenames: true

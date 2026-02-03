@@ -1,0 +1,99 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200">
+  <defs>
+    <!-- Gradient for galaxy core -->
+    <radialGradient id="coreGlow" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" style="stop-color:#fff4e0;stop-opacity:1" />
+      <stop offset="30%" style="stop-color:#ffd699;stop-opacity:0.9" />
+      <stop offset="70%" style="stop-color:#9966cc;stop-opacity:0.4" />
+      <stop offset="100%" style="stop-color:#1a1a2e;stop-opacity:0" />
+    </radialGradient>
+
+    <!-- Gradient for spiral arms -->
+    <linearGradient id="armGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#00d4ff;stop-opacity:0.9" />
+      <stop offset="50%" style="stop-color:#7c3aed;stop-opacity:0.7" />
+      <stop offset="100%" style="stop-color:#ec4899;stop-opacity:0.5" />
+    </linearGradient>
+
+    <!-- Gradient for orbit trails -->
+    <linearGradient id="orbitGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:#00d4ff;stop-opacity:0" />
+      <stop offset="50%" style="stop-color:#00d4ff;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#00d4ff;stop-opacity:0" />
+    </linearGradient>
+  </defs>
+
+  <!-- Background circle -->
+  <circle cx="100" cy="100" r="95" fill="#0f0f23" stroke="#1e3a5f" stroke-width="2"/>
+
+  <!-- Galaxy core glow -->
+  <circle cx="100" cy="100" r="40" fill="url(#coreGlow)"/>
+
+  <!-- Spiral arm 1 -->
+  <path d="M 100 100
+           Q 120 80, 150 75
+           T 175 95
+           Q 180 130, 155 155
+           Q 120 175, 85 165"
+        fill="none"
+        stroke="url(#armGradient)"
+        stroke-width="8"
+        stroke-linecap="round"
+        opacity="0.8"/>
+
+  <!-- Spiral arm 2 (opposite) -->
+  <path d="M 100 100
+           Q 80 120, 50 125
+           T 25 105
+           Q 20 70, 45 45
+           Q 80 25, 115 35"
+        fill="none"
+        stroke="url(#armGradient)"
+        stroke-width="8"
+        stroke-linecap="round"
+        opacity="0.8"/>
+
+  <!-- Orbital ellipse 1 - represents dynamics -->
+  <ellipse cx="100" cy="100" rx="70" ry="35"
+           fill="none"
+           stroke="#00d4ff"
+           stroke-width="1.5"
+           stroke-dasharray="4,4"
+           transform="rotate(-20, 100, 100)"
+           opacity="0.6"/>
+
+  <!-- Orbital ellipse 2 -->
+  <ellipse cx="100" cy="100" rx="55" ry="25"
+           fill="none"
+           stroke="#7c3aed"
+           stroke-width="1.5"
+           stroke-dasharray="4,4"
+           transform="rotate(25, 100, 100)"
+           opacity="0.5"/>
+
+  <!-- Stars scattered around -->
+  <circle cx="35" cy="45" r="2" fill="#ffffff" opacity="0.9"/>
+  <circle cx="160" cy="40" r="1.5" fill="#ffffff" opacity="0.7"/>
+  <circle cx="170" cy="140" r="2" fill="#ffffff" opacity="0.8"/>
+  <circle cx="45" cy="160" r="1.5" fill="#ffffff" opacity="0.6"/>
+  <circle cx="25" cy="90" r="1" fill="#ffffff" opacity="0.5"/>
+  <circle cx="175" cy="80" r="1" fill="#ffffff" opacity="0.5"/>
+  <circle cx="140" cy="170" r="1.5" fill="#ffffff" opacity="0.7"/>
+  <circle cx="60" cy="30" r="1" fill="#ffffff" opacity="0.6"/>
+
+  <!-- Central bright core -->
+  <circle cx="100" cy="100" r="8" fill="#fff4e0"/>
+  <circle cx="100" cy="100" r="4" fill="#ffffff"/>
+
+  <!-- Orbiting body on ellipse (represents star/particle) -->
+  <circle cx="155" cy="75" r="4" fill="#00d4ff">
+    <animate attributeName="opacity" values="1;0.5;1" dur="2s" repeatCount="indefinite"/>
+  </circle>
+
+  <!-- Trail for orbiting body -->
+  <path d="M 145 70 Q 150 72, 155 75"
+        fill="none"
+        stroke="url(#orbitGradient)"
+        stroke-width="3"
+        stroke-linecap="round"/>
+</svg>

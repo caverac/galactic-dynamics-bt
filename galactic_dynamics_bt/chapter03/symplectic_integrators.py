@@ -10,6 +10,7 @@ from typing import Callable, Optional, Tuple
 import warnings
 
 import numpy as np
+import numpy.typing as npt
 
 
 class SymplecticIntegrator:
@@ -53,25 +54,28 @@ class SymplecticIntegrator:
 
     """
 
-    dT: Callable[[np.ndarray], np.ndarray]
-    dV: Callable[[np.ndarray], np.ndarray]
-    H: Optional[Callable[[np.ndarray, np.ndarray], float]]
-    y0: np.ndarray
-    t: np.ndarray
+    dT: Callable[[npt.NDArray[np.float64]], npt.NDArray[np.float64]]
+    dV: Callable[[npt.NDArray[np.float64]], npt.NDArray[np.float64]]
+    H: Optional[Callable[[npt.NDArray[np.float64], npt.NDArray[np.float64]], float]]
+    y0: npt.NDArray[np.float64]
+    t: npt.NDArray[np.float64]
     order: int
 
-    integrator: Callable[[np.ndarray, np.ndarray, float], Tuple[np.ndarray, np.ndarray]]
+    integrator: Callable[
+        [npt.NDArray[np.float64], npt.NDArray[np.float64], float],
+        Tuple[npt.NDArray[np.float64], npt.NDArray[np.float64]],
+    ]
 
     def __init__(
         self,
-        dT: Callable[[np.ndarray], np.ndarray],
-        dV: Callable[[np.ndarray], np.ndarray],
-        y0: np.ndarray,
-        t: np.ndarray,
+        dT: Callable[[npt.NDArray[np.float64]], npt.NDArray[np.float64]],
+        dV: Callable[[npt.NDArray[np.float64]], npt.NDArray[np.float64]],
+        y0: npt.NDArray[np.float64],
+        t: npt.NDArray[np.float64],
         /,
         *,
         order: int = 2,
-        H: Optional[Callable[[np.ndarray, np.ndarray], float]] = None,
+        H: Optional[Callable[[npt.NDArray[np.float64], npt.NDArray[np.float64]], float]] = None,
     ):
         """
         Initialize the symplectic integrator.
@@ -116,7 +120,7 @@ class SymplecticIntegrator:
         else:
             raise ValueError(f"Unsupported order {self.order}. Supported: 1, 2, 4, 6, 8")
 
-    def integrate(self) -> np.ndarray:
+    def integrate(self) -> npt.NDArray[np.float64]:
         """
         Integrate the Hamiltonian system and return solution array.
 
@@ -176,7 +180,12 @@ class SymplecticIntegrator:
 
         return y
 
-    def _euler_symplectic(self, q: np.ndarray, p: np.ndarray, dt: float) -> Tuple[np.ndarray, np.ndarray]:
+    def _euler_symplectic(
+        self,
+        q: npt.NDArray[np.float64],
+        p: npt.NDArray[np.float64],
+        dt: float,
+    ) -> Tuple[npt.NDArray[np.float64], npt.NDArray[np.float64]]:
         """
         First-order symplectic Euler method.
 
@@ -193,7 +202,12 @@ class SymplecticIntegrator:
         q_new = q + dt * self.dT(p_new)
         return q_new, p_new
 
-    def _verlet(self, q: np.ndarray, p: np.ndarray, dt: float) -> Tuple[np.ndarray, np.ndarray]:
+    def _verlet(
+        self,
+        q: npt.NDArray[np.float64],
+        p: npt.NDArray[np.float64],
+        dt: float,
+    ) -> Tuple[npt.NDArray[np.float64], npt.NDArray[np.float64]]:
         """
         Second-order Verlet (leapfrog) integrator.
 
@@ -214,7 +228,12 @@ class SymplecticIntegrator:
         return q_new, p_new
 
     # pylint: disable=too-many-locals
-    def _ruth4(self, q: np.ndarray, p: np.ndarray, dt: float) -> Tuple[np.ndarray, np.ndarray]:
+    def _ruth4(
+        self,
+        q: npt.NDArray[np.float64],
+        p: npt.NDArray[np.float64],
+        dt: float,
+    ) -> Tuple[npt.NDArray[np.float64], npt.NDArray[np.float64]]:
         """
         Fourth-order Ruth integrator.
 
@@ -222,25 +241,46 @@ class SymplecticIntegrator:
         Provides fourth-order accuracy while preserving symplectic structure.
         More expensive than Verlet but allows larger time steps.
 
-        The method composes multiple Verlet steps with coefficients:
-        1/(2 - 2^(1/3)) = 1.351
+        Uses the standard Ruth4 coefficients for position and momentum updates.
         """
-        # Ruth coefficients
-        theta = 1.0 / (2.0 - 2 ** (1.0 / 3.0))
-        alpha = theta
-        beta = -theta / 2.0
-        gamma = 1.0 - 2.0 * theta
-        delta = gamma
+        # Standard Ruth4 coefficients
+        c1 = c4 = 1.0 / (2.0 * (2.0 - 2 ** (1.0 / 3.0)))
+        c2 = c3 = (1.0 - 2 ** (1.0 / 3.0)) / (2.0 * (2.0 - 2 ** (1.0 / 3.0)))
+        d1 = d3 = 1.0 / (2.0 - 2 ** (1.0 / 3.0))
+        d2 = -(2 ** (1.0 / 3.0)) / (2.0 - 2 ** (1.0 / 3.0))
 
-        # Substeps
-        q1, p1 = self._verlet(q, p, alpha * dt)
-        q2, p2 = self._verlet(q1, p1, beta * dt)
-        q3, p3 = self._verlet(q2, p2, gamma * dt)
-        q4, p4 = self._verlet(q3, p3, delta * dt)
+        # Apply the Ruth4 composition: c1, d1, c2, d2, c3, d3, c4
+        # where c_i are position step coefficients and d_i are momentum step coefficients
 
-        return q4, p4
+        # Step 1: c1 * dt position update
+        q = q + c1 * dt * self.dT(p)
 
-    def _kahan_li6(self, q: np.ndarray, p: np.ndarray, dt: float) -> Tuple[np.ndarray, np.ndarray]:
+        # Step 2: d1 * dt momentum update
+        p = p - d1 * dt * self.dV(q)
+
+        # Step 3: c2 * dt position update
+        q = q + c2 * dt * self.dT(p)
+
+        # Step 4: d2 * dt momentum update
+        p = p - d2 * dt * self.dV(q)
+
+        # Step 5: c3 * dt position update
+        q = q + c3 * dt * self.dT(p)
+
+        # Step 6: d3 * dt momentum update
+        p = p - d3 * dt * self.dV(q)
+
+        # Step 7: c4 * dt position update
+        q = q + c4 * dt * self.dT(p)
+
+        return q, p
+
+    def _kahan_li6(
+        self,
+        q: npt.NDArray[np.float64],
+        p: npt.NDArray[np.float64],
+        dt: float,
+    ) -> Tuple[npt.NDArray[np.float64], npt.NDArray[np.float64]]:
         """
         Sixth-order Kahan-Li integrator.
 
@@ -272,7 +312,12 @@ class SymplecticIntegrator:
         return q_curr, p_curr
 
     # pylint: disable=too-many-locals
-    def _kahan_li8(self, q: np.ndarray, p: np.ndarray, dt: float) -> Tuple[np.ndarray, np.ndarray]:
+    def _kahan_li8(
+        self,
+        q: npt.NDArray[np.float64],
+        p: npt.NDArray[np.float64],
+        dt: float,
+    ) -> Tuple[npt.NDArray[np.float64], npt.NDArray[np.float64]]:
         """
         Eighth-order Kahan-Li integrator.
 
